@@ -20,6 +20,37 @@
                     Dashboard
                 </a>
             </li>
+            <li class="{{ Route::is("article.index") || Route::is("article.create") ? "open" : "" }}">
+                <a href="#" class="">
+                    <i class="material-icons">tune</i>
+                    Makale Yönetimi
+                    <i class="material-icons has-sub-menu">keyboard_arrow_right</i>
+                </a>
+                <ul class="sub-menu" style="">
+                    <li>
+                        <a href="{{ route("article.create") }}" class="{{ Route::is("article.create") ? "active" : "" }}">Makale Ekle</a>
+                    </li>
+                    <li>
+                        <a href="{{ route("article.index") }}" class="{{ Route::is("article.index") ? "active" : "" }}">Makale Listesi</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="{{ Route::is("category.index") || Route::is("category.create") ? "open" : "" }}">
+                <a href="#" class="">
+                    <i class="material-icons">tune</i>
+                    Kategori Yönetimi
+                    <i class="material-icons has-sub-menu">keyboard_arrow_right</i>
+                </a>
+                <ul class="sub-menu" style="">
+                    <li>
+                        <a href="{{ route("category.create") }}" class="{{ Route::is("category.create") ? "active" : "" }}">Kategori Ekle</a>
+                    </li>
+                    <li>
+                        <a href="{{ route("category.index") }}" class="{{ Route::is("category.index") ? "active" : "" }}">Kategori Listesi</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </div>
