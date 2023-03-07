@@ -24,7 +24,7 @@ class CategoryFactory extends Factory
             'status' => fake()->boolean,
             'feature_status' => fake()->boolean,
             "description" => fake()->paragraph(2),
-            "parent_id" => random_int(1,20),
+            "parent_id" => random_int(2,20),
             "order" => random_int(1,1000),
             "seo_keywords" => Str::slug(fake()->address, ", "),
             "seo_description" => fake()->text,
