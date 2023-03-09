@@ -11,16 +11,52 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with(["parentCategory:id,name", 'user'])
-            //            ->whereHas("parentCategory")
-            //            ->whereNotNull("parent_id")
-            ->orderBy("order", "DESC")->paginate(5);
-        //        dd($categories);
-        //            ->get();
 
-        return view("admin.categories.list", ['list' => $categories]);
+        $parentCategories = Category::all();
+        $users = User::all();
+
+        $parentID = $request->parent_id;
+        $userID = $request->user_id;
+
+//        $categoryQuery = Category::with(["parentCategory:id,name", 'user']);
+//
+//        if (!is_null($parentID))
+//        {
+//            $categoryQuery->where("parent_id", $parentID);
+//        }
+//        $categoryQuery->paginate(5);
+
+
+        $categories = Category::with(["parentCategory:id,name", 'user'])
+//            ->where(function($query) use ($parentID, $userID){
+//                if (!is_null($parentID))
+//                {
+//                    $query->where('parent_id', $parentID);
+//                }
+//                if (!is_null($userID))
+//                {
+//                    $query->where('user_id', $userID);
+//                }
+//            })
+//            ->where("parent_id", $parentID)
+            ->name($request->name)
+            ->description($request->description)
+            ->slug($request->slug)
+            ->order($request->order)
+            ->status($request->status)
+            ->featureStatus($request->feature_status)
+            ->user($request->user_id)
+            ->parentCategory($request->parent_id)
+            ->orderBy("order", "DESC")
+            ->paginate(5);
+
+        return view("admin.categories.list", [
+            'list' => $categories,
+            "users" => $users,
+            "parentCategories" => $parentCategories
+        ]);
     }
 
     public function create()

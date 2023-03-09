@@ -68,12 +68,12 @@
                         </li>
                     @endif
 
-                    <li class="nav-item hidden-on-mobile">
-                        <a class="nav-link language-dropdown-toggle"
+                    <li class="nav-item">
+                        <a class="nav-link language-dropdown-toggle text-warning"
                            href="#"
                            id="languageDropDown"
                            data-bs-toggle="dropdown">
-{{--                            {{ auth()->user()->name }}--}}
+                            <u>{{ auth()->user()->name }}</u>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end language-dropdown" aria-labelledby="languageDropDown">
                             <li>

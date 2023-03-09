@@ -3,6 +3,7 @@
     Kategori Listeleme
 @endsection
 @section("css")
+    <link rel="stylesheet" href="{{ asset("assets/plugins/select2/css/select2.min.css") }}">
     <style>
         .table-hover > tbody > tr:hover {
             --bs-table-hover-bg: transparent;
@@ -20,6 +21,61 @@
         </x-slot:header>
 
         <x-slot:body>
+            <form action="">
+                <div class="row">
+                    <div class="col-3 my-2">
+                        <input type="text" class="form-control" placeholder="Name" name="name" value="{{ request()->get("name") }}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <input type="text" class="form-control" placeholder="Slug" name="slug" value="{{ request()->get("slug") }}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <input type="text" class="form-control" placeholder="Description" name="description" value="{{ request()->get("description") }}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <input type="text" class="form-control" placeholder="Order" name="order" value="{{ request()->get("order") }}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <select class="js-states form-control" tabindex="-1" id="selectParentCategory" name="parent_id" style="display: none; width: 100%">
+                            <option value="{{ null }}">Üst Kategori Seçin</option>
+                            @foreach($parentCategories as $parent)
+                                <option value="{{ $parent->id }}" {{ request()->get("parent_id") == $parent->id ? "selected" : "" }}>{{ $parent->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3 my-2">
+                        <select class="form-select" name="user_id">
+                            <option value="{{ null }}">Users</option>
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ request()->get("user_id") == $user->id ? "selected" : "" }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3 my-2">
+                        <select class="form-select" name="status" aria-label="Status">
+                            <option value="{{ null }}">Status</option>
+                            <option value="0" {{ request()->get("status") === "0" ? "selected" : "" }}>Pasif</option>
+                            <option value="1" {{ request()->get("status") === "1" ? "selected" : "" }}>Aktif</option>
+                        </select>
+                    </div>
+                    <div class="col-3 my-2">
+                        <select class="form-select" name="feature_status" aria-label="Feature Status">
+                            <option value="{{ null }}">Feature Status</option>
+                            <option value="0" {{ request()->get("feature_status") === "0" ? "selected" : "" }}>Pasif</option>
+                            <option value="1" {{ request()->get("feature_status") === "1" ? "selected" : "" }}>Aktif</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="col-6 mb-2 d-flex">
+                        <button class="btn btn-primary w-50 me-4" type="submit">Filtrele</button>
+                        <button class="btn btn-warning w-50" type="button">Filtreyi Temizle</button>
+                    </div>
+                    <hr>
+                </div>
+
+            </form>
             <x-bootstrap.table
             :class="'table-striped table-hover table-responsive'"
             :is-responsive="1"
@@ -55,7 +111,7 @@
                                     <a href="javascript:void(0)" data-id="{{ $category->id }}" class="btn btn-danger btn-sm btnChangeFeatureStatus">Pasif</a>
                                 @endif
                             </td>
-                            <td>{{ substr($category->description, 0, 20) }}</td>
+                            <td title="{{ $category->description }}">{{ substr($category->description, 0, 20) }}</td>
                             <td>{{ $category->order }}</td>
                             <td>{{ $category->parentCategory?->name }}</td>
                             <td>{{ $category->user->name }}</td>
@@ -80,7 +136,13 @@
             </x-bootstrap.table>
             <div class="d-flex justify-content-center">
 {{--                {{ $list->onEachside(0)->links("vendor.pagination.bootstrap-5") }}--}}
-                {{ $list->onEachside(2)->links() }}
+{{--                {{ $list->onEachside(2)->links() }}--}}
+{{--                @php--}}
+{{--                    $filterArray = ['name' => request()->get("name"), "description" => request()->get("description")];--}}
+{{--                @endphp --}}
+{{--                {{ $list->appends($filterArray)->onEachside(2)->links() }}--}}
+                {{ $list->appends(request()->all())->onEachside(2)->links() }}
+{{--                {{ $list->appends($_GET)->onEachside(2)->links() }}--}}
             </div>
         </x-slot:body>
     </x-bootstrap.card>
@@ -91,6 +153,8 @@
 @endsection
 
 @section("js")
+    <script src="{{ asset("assets/plugins/select2/js/select2.full.min.js") }}"></script>
+    <script src="{{ asset("assets/js/pages/select2.js") }}"></script>
     <script>
         $(document).ready(function ()
         {
@@ -187,6 +251,9 @@
                 })
 
             });
+
+            $('#selectParentCategory').select2();
+
 
         });
     </script>
