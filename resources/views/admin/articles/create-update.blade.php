@@ -103,6 +103,7 @@
                                id="publish_date"
                                name="publish_date"
                                type="text"
+                               value="{{ isset($article) ? $article->publish_date : "" }}"
                                placeholder="Ne zaman yayınlansın?">
 
                         <label for="image" class="form-label m-t-sm">Makale Görseli</label>
