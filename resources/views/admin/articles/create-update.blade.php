@@ -78,7 +78,7 @@
                         </select>
 
                         <label for="summernote" class="form-label">İçerik</label>
-                        <textarea name="body" id="summernote" class="m-b-sm">Hello Summernote</textarea>
+                        <textarea name="body" id="summernote" class="m-b-sm">{!! isset($article) ? $article->body : "" !!}</textarea>
 
                         <label for="seo_keywords" class="form-label m-t-sm">Seo Anahtar Kelimeler</label>
                         <textarea

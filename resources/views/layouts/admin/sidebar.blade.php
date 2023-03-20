@@ -14,7 +14,7 @@
             <li class="sidebar-title">
                 Apps
             </li>
-            <li class="active-page">
+            <li>
                 <a href="{{ route('home') }}" class="{{ Route::is("home") ? "active" : "" }}">
                     <i class="material-icons-two-tone">dashboard</i>
                     Dashboard
@@ -50,6 +50,13 @@
                         <a href="{{ route("category.index") }}" class="{{ Route::is("category.index") ? "active" : "" }}">Kategori Listesi</a>
                     </li>
                 </ul>
+            </li>
+
+            <li class="{{ Route::is("settings") ? "open" : "" }}">
+                <a href="{{ route("settings") }}" >
+                    <i class="material-icons-two-tone">settings</i>
+                    Ayarlar
+                </a>
             </li>
         </ul>
     </div>

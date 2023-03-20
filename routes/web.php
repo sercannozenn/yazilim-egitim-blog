@@ -39,6 +39,10 @@ Route::prefix("admin")->middleware("auth")->group(function()
     Route::post('categories/delete', [CategoryController::class, 'delete'])->name("categories.delete");
     Route::get('categories/{id}/edit', [CategoryController::class, 'edit'])->name("categories.edit")->whereNumber("id");
     Route::post('categories/{id}/edit', [CategoryController::class, 'update'])->whereNumber("id");
+
+
+    Route::get("settings", [\App\Http\Controllers\Admin\SettingsController::class, "show"])->name("settings");
+    Route::post("settings", [\App\Http\Controllers\Admin\SettingsController::class, "update"]);
 });
 
 
