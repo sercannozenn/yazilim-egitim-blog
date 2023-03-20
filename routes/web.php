@@ -41,6 +41,12 @@ Route::prefix("admin")->middleware("auth")->group(function()
     Route::post('categories/{id}/edit', [CategoryController::class, 'update'])->whereNumber("id");
 });
 
+
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+
 Route::get('/', function () {
 //    return view('admin.index');
 })->name("home");
@@ -55,4 +61,8 @@ Route::post("/logout", [LoginController::class, "logout"])->name("logout");
 
 Route::get("/register", [LoginController::class, "showRegister"])->name("register");
 Route::post("/register", [LoginController::class, "register"]);
+
+
+
+
 
