@@ -25,7 +25,8 @@
                     @endif
                     <form action="{{ isset($article) ? route('article.edit', ['id' => $article->id]) : route('article.create') }}"
                           method="POST"
-                          enctype="multipart/form-data">
+                          enctype="multipart/form-data"
+                          id="articleForm">
                         @csrf
                         <label for="title" class="form-label">Makale Başlığı</label>
                         <input type="text"
@@ -124,7 +125,7 @@
 
                         <hr>
                         <div class="col-6 mx-auto mt-2">
-                            <button type="submit" class="btn btn-success btn-rounded w-100">
+                            <button type="button" class="btn btn-success btn-rounded w-100" id="btnSave">
                                 {{ isset($article) ? "Güncelle" : "Kaydet" }}
                             </button>
                         </div>
@@ -146,4 +147,48 @@
             dateFormat: "Y-m-d H:i",
         });
     </script>
+
+    <script>
+        let title = $('#title');
+        let tags = $('#tags');
+        let category_id = $('#category_id');
+
+        $(document).ready(function ()
+        {
+            $('#btnSave').click(function () {
+                if(title.val().trim() === "" || title.val().trim() == null)
+                {
+                    Swal.fire({
+                        title: "Uyarı",
+                        text: "Makale başlığı boş geçilemez",
+                        confirmButtonText: 'Tamam',
+                        icon: "info"
+                    });
+                }
+                else if(tags.val().trim().length < 3)
+                {
+                    Swal.fire({
+                        title: "Uyarı",
+                        text: "Etiket alanı boş geçilemez",
+                        confirmButtonText: 'Tamam',
+                        icon: "info"
+                    });
+                }
+                else if(category_id.val().trim() == null || category_id.val().trim() === "")
+                {
+                    Swal.fire({
+                        title: "Uyarı",
+                        text: "Kategori seçin",
+                        confirmButtonText: 'Tamam',
+                        icon: "info"
+                    });
+                }
+                else
+                {
+                    $("#articleForm").submit();
+                }
+            });
+        });
+    </script>
+
 @endsection

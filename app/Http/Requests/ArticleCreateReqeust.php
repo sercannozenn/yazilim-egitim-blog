@@ -26,7 +26,6 @@ class ArticleCreateReqeust extends FormRequest
             "slug" => ["nullable", "max:255"],
             "body" => ["required"],
             "category_id" => ["required"],
-//            "image" => ['nullable', 'image', 'mimes:jpeg,png', "max:2048"]
             "image" => ['image', 'mimetypes:image/jpeg,image/jpg,image/png', "max:2048"]
         ];
     }

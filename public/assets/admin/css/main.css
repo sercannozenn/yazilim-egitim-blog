@@ -1279,7 +1279,7 @@ h1, h2, h3, h4, h5, h6 {
         position: relative;
         height: auto;
     }
-    
+
     .menu-hover .app-sidebar::before {
         position: fixed;
         top: 0;
@@ -1291,68 +1291,68 @@ h1, h2, h3, h4, h5, h6 {
         box-shadow: 0 0 1.25rem rgba(31, 45, 61, .04);
         z-index: -1;
     }
-    
+
     .menu-dark.menu-hover .app-sidebar::before {
         background: #13171f;
     }
-    
+
     .menu-hover .app-container {
         display: inline-block;
         margin-left: 0;
     }
-    
+
     .menu-hover.sidebar-hidden .app-sidebar {
         transform: none;
         margin-left: -280px;
     }
-    
+
     .menu-hover .app-menu {
         overflow: visible!important;
     }
-    
+
     .menu-hover .app-menu .accordion-menu {
         overflow-x: visible;
     }
-    
+
     .menu-hover .app-menu li {
         position: relative;
     }
-    
+
     .menu-hover .app-menu ul>li>a {
         -webkit-transition: padding-right 0s, color 0.2s ease-in-out, padding-left 0.2s ease-in-out, filter 0.2s ease-in-out;
         -moz-transition: padding-right 0s, color 0.2s ease-in-out, padding-left 0.2s ease-in-out, filter 0.2s ease-in-out;
         -o-transition: padding-right 0s, color 0.2s ease-in-out, padding-left 0.2s ease-in-out, filter 0.2s ease-in-out;
         transition: padding-right 0s, color 0.2s ease-in-out, padding-left 0.2s ease-in-out, filter 0.2s ease-in-out;
     }
-    
+
     .menu-hover .app-menu ul>li:hover {
         width: calc(100% + 20px)
     }
-    
+
     .menu-hover .app-menu>ul>li:hover>a {
         padding-left: 20px;
         margin-right: 40px;
         color: #2269F5;
     }
-    
+
     .menu-dark.menu-hover .app-menu>ul>li:hover>a {
         color: #d3daed;
     }
-    
+
     .menu-hover .app-menu ul>li>ul>li:hover>a {
         margin-right: 20px;
         color: #1e1e24;
         font-weight: 500;
     }
-    
+
     .menu-dark.menu-hover .app-menu ul>li ul>li:hover>a {
         color: #fff;
     }
-    
+
     .app-menu>ul>li:hover>a>i:not(.has-sub-menu).material-icons-two-tone {
         filter: invert(34%) sepia(23%) saturate(3309%) hue-rotate(195deg) brightness(109%) contrast(115%);
     }
-    
+
     .menu-hover .app-menu ul>li>a+.sub-menu {
         display: block!important;
         position: absolute;
@@ -1372,31 +1372,31 @@ h1, h2, h3, h4, h5, h6 {
         -o-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
-    
+
     .menu-hover.menu-dark .app-menu>ul>li ul {
         background: #1f2433;
     }
-    
+
     .menu-hover .app-menu>ul>li>a+.sub-menu {
         top: -40px;
         left: 270px;
     }
-    
+
     .menu-hover .app-menu>ul>li>a.active+.sub-menu {
         display: none;
     }
-    
+
     .menu-hover .app-menu ul>li:hover>.sub-menu {
         height: auto;
         visibility: visible;
         opacity: 1;
         left: 200px;
     }
-    
+
     .menu-hover .app-menu>ul>li:hover>.sub-menu {
         left: 280px;
     }
-    
+
     .menu-hover .app-menu ul>li>.sub-menu:after {
         position: absolute;
         top: 20px;
@@ -1408,15 +1408,15 @@ h1, h2, h3, h4, h5, h6 {
         border-top: 7px solid transparent;
         content: '';
     }
-    
+
     .menu-hover.menu-dark .app-menu ul>li>.sub-menu:after {
         border-right-color: #1f2433;
     }
-    
+
     .menu-hover .app-menu>ul>li>.sub-menu:after {
         top: 42.5px;
     }
-    
+
 }
 
 /* Colored Sidebar */
@@ -2070,13 +2070,13 @@ h1, h2, h3, h4, h5, h6 {
     margin: 10px;
 }
 
-.dropdown.dropup>.dropdown-menu::after, 
-.btn-group.dropup>.dropdown-menu::after, 
-.dropdown-toggle.dropup>.dropdown-menu::after, 
-.dropdown-menu[data-popper-placement="top-start"]::after, 
-.dropdown.dropend>.dropdown-menu::after, 
-.btn-group.dropend>.dropdown-menu::after, 
-.dropdown-toggle.dropend>.dropdown-menu::after, 
+.dropdown.dropup>.dropdown-menu::after,
+.btn-group.dropup>.dropdown-menu::after,
+.dropdown-toggle.dropup>.dropdown-menu::after,
+.dropdown-menu[data-popper-placement="top-start"]::after,
+.dropdown.dropend>.dropdown-menu::after,
+.btn-group.dropend>.dropdown-menu::after,
+.dropdown-toggle.dropend>.dropdown-menu::after,
 .dropdown-menu[data-popper-placement="right-start"]::after,
 .dropdown.dropstart>.dropdown-menu::after,
 .btn-group.dropstart>.dropdown-menu::after,
@@ -4833,7 +4833,7 @@ body.modal-open {
     display: flex;
     align-items: end;
     margin-bottom: 20px;
-    
+
 }
 
 .widget-chat .widget-chat-messages-container .widget-chat-message-item img {
@@ -6350,7 +6350,7 @@ span.flatpickr-weekday {
 .settings-security-two-factor {
     padding: 25px;
     background-color: #F4F7FA;
-    border-radius: 10px;    
+    border-radius: 10px;
     border: 1px solid #E3E6EA;
 }
 
@@ -6683,7 +6683,7 @@ span.flatpickr-weekday {
     .app.sidebar-hidden .app-sidebar {
         transform: translateX(0);
     }
-    
+
     .app.sidebar-hidden .app-container {
         transform: translateX(280px);
     }

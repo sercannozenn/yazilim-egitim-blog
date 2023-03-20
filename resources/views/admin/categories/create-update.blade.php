@@ -20,7 +20,9 @@
                             <div class="alert alert-danger">{{ $error }}</div>
                         @endforeach
                     @endif
-                    <form action="{{ isset($category) ? route('categories.edit', ['id' => $category->id]) : route('category.create') }}" method="POST">
+                    <form action="{{ isset($category) ? route('categories.edit', ['id' => $category->id]) : route('category.create') }}" method="POST"
+                    enctype="multipart/form-data"
+                    id="categoryForm">
                         @csrf
                         <input type="text"
                                class="form-control form-control-solid-bordered m-b-sm
@@ -31,8 +33,8 @@
                                aria-describedby="solidBoderedInputExample"
                                placeholder="Kategori Adı"
                                name="name"
+                               id="name"
                                value="{{ isset($category) ? $category->name : "" }}"
-                               required
                         >
                         @if($errors->has("name"))
                             {{ $errors->first("name") }}
@@ -87,6 +89,15 @@
                             rows="5"
                             placeholder="Seo Description"
                             style="resize: none">{{ isset($category) ? $category->seo_description : "" }}</textarea>
+
+                        <label for="image" class="form-label m-t-sm">Kategori Görseli</label>
+                        <input type="file" name="image" id="image" class="form-control" accept="image/png, image/jpeg, image/jpg">
+                        <div class="form-text m-b-sm">Kategori Görseli Maksimum 2mb olmalıdır</div>
+
+                        @if(isset($category) && $category->image)
+                            <img src="{{ asset($category->image) }}" alt="" class="img-fluid" style="max-height: 200px">
+                        @endif
+
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="status" value="1" id="status" {{ isset($category) && $category->status  ? "checked" : "" }}>
                             <label class="form-check-label" for="status">
@@ -102,7 +113,7 @@
                         </div>
                         <hr>
                         <div class="col-6 mx-auto mt-2">
-                            <button type="submit" class="btn btn-success btn-rounded w-100">
+                            <button type="button" class="btn btn-success btn-rounded w-100" id="btnSave">
                                 {{ isset($category) ? "Güncelle" : "Kaydet" }}
                             </button>
                         </div>
@@ -114,4 +125,26 @@
 @endsection
 
 @section("js")
+    <script>
+        let name = $('#name');
+
+        $(document).ready(function ()
+        {
+            $('#btnSave').click(function () {
+               if(name.val().trim() === "" || name.val().trim() == null)
+               {
+                   Swal.fire({
+                       title: "Uyarı",
+                       text: "Kategori adı boş geçilemez",
+                       confirmButtonText: 'Tamam',
+                       icon: "info"
+                   });
+               }
+               else
+               {
+                   $("#categoryForm").submit();
+               }
+            });
+        });
+    </script>
 @endsection

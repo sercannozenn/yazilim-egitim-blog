@@ -70,24 +70,25 @@ class ArticleController extends Controller
 
     public function store(ArticleCreateReqeust $request)
     {
-        $imageFile = $request->file("image");
-        $originalName = $imageFile->getClientOriginalName();
-        $originalExtension = $imageFile->getClientOriginalExtension();
-//        $originalExtension = $imageFile->extension();
-        $explodeName = explode(".", $originalName)[0];
-        $fileName = Str::slug($explodeName) . "." . $originalExtension;
-
-        $folder = "articles";
-        $publicPath = "storage/" . $folder;
-
-
-        if (file_exists(public_path($publicPath . $fileName)))
+        if(!is_null($request->image))
         {
-            return redirect()
-                ->back()
-                ->withErrors([
-                    'image' => "Aynı görsel daha önce yüklenmiştir."
-                ]);
+            $imageFile = $request->file("image");
+            $originalName = $imageFile->getClientOriginalName();
+            $originalExtension = $imageFile->getClientOriginalExtension();
+            $explodeName = explode(".", $originalName)[0];
+            $fileName = Str::slug($explodeName) . "." . $originalExtension;
+
+            $folder = "articles";
+            $publicPath = "storage/" . $folder;
+
+            if (file_exists(public_path($publicPath . $fileName)))
+            {
+                return redirect()
+                    ->back()
+                    ->withErrors([
+                        'image' => "Aynı görsel daha önce yüklenmiştir."
+                    ]);
+            }
         }
 
         $data = $request->except("_token");
@@ -112,14 +113,17 @@ class ArticleController extends Controller
         }
 
         $data["slug"] = $slug;
-        $data["image"] = $publicPath . "/" . $fileName;
+        if (!is_null($request->image))
+        {
+            $data["image"] = $publicPath . "/" . $fileName;
+        }
         $data["user_id"] = auth()->id();
-//        $data["user_id"] = auth()->user()->id;
-//        $data["user_id"] = \Auth::id();
-//        $data["user_id"] = \Auth::user()->id;
 
         Article::create($data);
-        $imageFile->storeAs($folder,  $fileName);
+        if (!is_null($request->image))
+        {
+            $imageFile->storeAs($folder,  $fileName);
+        }
 
         alert()->success('Başarılı', "Makale Kaydedildi")->showConfirmButton('Tamam', '#3085d6')->autoClose(5000);
         return redirect()->back();

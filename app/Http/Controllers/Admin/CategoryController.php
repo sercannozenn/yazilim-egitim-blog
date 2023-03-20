@@ -81,8 +81,35 @@ class CategoryController extends Controller
             $category->feature_status  = $request->feature_status ? 1 : 0;
             $category->seo_keywords    = $request->seo_keywords;
             $category->seo_description = $request->seo_description;
-            $category->user_id         = random_int(1, 10);
+            $category->user_id         = auth()->id();
             $category->order           = $request->order;
+
+
+
+            if (!is_null($request->image))
+            {
+                $imageFile = $request->file("image");
+                $originalName = $imageFile->getClientOriginalName();
+                $originalExtension = $imageFile->getClientOriginalExtension();
+                $explodeName = explode(".", $originalName)[0];
+                $fileName = Str::slug($explodeName) . "." . $originalExtension;
+
+                $folder = "categories";
+                $publicPath = "storage/" . $folder;
+
+                if (file_exists(public_path($publicPath . $fileName)))
+                {
+                    return redirect()
+                        ->back()
+                        ->withErrors([
+                            'image' => "Aynı görsel daha önce yüklenmiştir."
+                        ]);
+                }
+
+                $category->image = $publicPath . "/" . $fileName;
+                $imageFile->storeAs($folder,  $fileName);
+            }
+
 
             $category->save();
         }
@@ -155,7 +182,7 @@ class CategoryController extends Controller
 
         $statusText = "Kategori Silindi";
 
-        alert()->success('Başarılı', $statusText)->showConfirmButton('Tamam', '#3085d6')->autoClose(5000);
+        alert()->success('Başarılı', $statusText)->showConfirmButton('Tamam', '#3085d6');
 
         return redirect()->route("category.index");
 
@@ -211,6 +238,36 @@ class CategoryController extends Controller
         $category->seo_description = $request->seo_description;
         //        $category->user_id         = random_int(1, 10);
         $category->order = $request->order;
+
+        if (!is_null($request->image))
+        {
+            $imageFile = $request->file("image");
+            $originalName = $imageFile->getClientOriginalName();
+            $originalExtension = $imageFile->getClientOriginalExtension();
+            $explodeName = explode(".", $originalName)[0];
+            $fileName = Str::slug($explodeName) . "." . $originalExtension;
+
+            $folder = "categories";
+            $publicPath = "storage/" . $folder;
+
+            if (file_exists(public_path($publicPath . $fileName)))
+            {
+                return redirect()
+                    ->back()
+                    ->withErrors([
+                        'image' => "Aynı görsel daha önce yüklenmiştir."
+                    ]);
+            }
+
+            if (file_exists(public_path($category->image)))
+            {
+                \File::delete(public_path($category->image));
+            }
+            $category->image = $publicPath . "/" . $fileName;
+            $imageFile->storeAs($folder, $fileName);
+
+        }
+
 
         $category->save();
 

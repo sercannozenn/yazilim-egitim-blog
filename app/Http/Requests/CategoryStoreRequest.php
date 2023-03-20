@@ -27,6 +27,7 @@ class CategoryStoreRequest extends FormRequest
             "description" => ["max:255"],
             "seo_keywords" => ["max:255"],
             "seo_description" => ["max:255"],
+            "image" => ["image", "mimes:png,jpeg,jpg", "nullable", "max:2048"],
         ];
     }
 
