@@ -74,6 +74,7 @@ class CategoryController extends Controller
         {
             $category                  = new Category();
             $category->name            = $request->name;
+            $category->color            = $request->color;
             $category->slug            = is_null($this->slugCheck($slug)) ? $slug : Str::slug($slug . time());
             $category->description     = $request->description;
             $category->status          = $request->status ? 1 : 0;
@@ -229,7 +230,7 @@ class CategoryController extends Controller
             $category->slug = Str::slug($slug . time());
         }
 
-
+        $category->color           = $request->color;
         $category->description     = $request->description;
         $category->status          = $request->status ? 1 : 0;
         $category->parent_id       = $request->parent_id;

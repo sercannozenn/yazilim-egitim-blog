@@ -25,6 +25,18 @@
                     enctype="multipart/form-data"
                     id="settingsForm">
                         @csrf
+                        <label for="header_text" class="form-label">Telegram Linki</label>
+                        <input type="text"
+                               class="form-control form-control-solid-bordered m-b-sm
+                               @if($errors->has("telegram_link"))
+                                    border-danger
+                               @endif
+                               "
+                               placeholder="Telegram Link"
+                               name="telegram_link"
+                               id="telegram_link"
+                               value="{{ isset($settings) ? $settings->telegram_link : "" }}"
+                        >
                         <label for="header_text" class="form-label">Header Açıklama</label>
                         <textarea
                             class="form-control form-control-solid-bordered m-b-sm

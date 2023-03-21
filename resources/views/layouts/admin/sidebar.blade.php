@@ -33,6 +33,10 @@
                     <li>
                         <a href="{{ route("article.index") }}" class="{{ Route::is("article.index") ? "active" : "" }}">Makale Listesi</a>
                     </li>
+                    <li>
+                        <a href="{{ route("article.pending-approval") }}" class="{{ Route::is("article.pending-approval") ? "active" : "" }}">Onay Bekleyen Yorumlar</a>
+                    </li>
+
                 </ul>
             </li>
 

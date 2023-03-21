@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Admin\ArticleController;
 use \App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Auth\LoginController;
+use \App\Http\Controllers\FrontController;
+use \App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ArticleCommentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +34,9 @@ Route::prefix("admin")->middleware("auth")->group(function()
     Route::post('article/change-status', [ArticleController::class, 'changeStatus'])->name("article.changeStatus");
     Route::delete('article/delete', [ArticleController::class, 'delete'])->name("article.delete");
 
+    Route::get("article/pending-approval", [ArticleCommentController::class, "approvalList"])->name("article.pending-approval");
+    Route::post("article/pending-approval/change-status", [ArticleCommentController::class, "changeStatus"])->name("article.pending-approval.changeStatus");
+
 
     Route::get("categories", [CategoryController::class, "index"])->name("category.index");
     Route::get("categories/create", [CategoryController::class, "create"])->name("category.create");
@@ -41,8 +48,19 @@ Route::prefix("admin")->middleware("auth")->group(function()
     Route::post('categories/{id}/edit', [CategoryController::class, 'update'])->whereNumber("id");
 
 
-    Route::get("settings", [\App\Http\Controllers\Admin\SettingsController::class, "show"])->name("settings");
-    Route::post("settings", [\App\Http\Controllers\Admin\SettingsController::class, "update"]);
+    Route::get("settings", [SettingsController::class, "show"])->name("settings");
+    Route::post("settings", [SettingsController::class, "update"]);
+
+
+    Route::get("users/create", [UserController::class, "create"])->name("user.create");
+    Route::post("users/create", [UserController::class, "store"]);
+    Route::get("users", [UserController::class, "index"])->name("user.index");
+    Route::post('users/change-status', [UserController::class, 'changeStatus'])->name("user.changeStatus");
+    Route::get('users/{user:username}/edit', [UserController::class, 'edit'])->name("user.edit");
+    Route::post('users/{user:username}/edit', [UserController::class, 'update'])->whereNumber("id");
+    Route::delete('users/delete', [UserController::class, 'delete'])->name("user.delete");
+    Route::post('users/restore', [UserController::class, 'restore'])->name("user.restore");
+
 });
 
 
@@ -51,10 +69,11 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
-Route::get('/', function () {
-//    return view('admin.index');
-})->name("home");
 
+Route::get('/', [FrontController::class, "home"])->name("home");
+Route::get("/kategoriler/{category:slug}", [FrontController::class, "category"])->name("front.category");
+Route::get("/{user:username}/{article:slug}", [FrontController::class, "articleDetail"])->name("front.articleDetail");
+Route::post("{article:id}/makale-yorum", [FrontController::class, "articleComment"])->name("article.comment");
 
 
 

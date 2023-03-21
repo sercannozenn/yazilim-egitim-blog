@@ -13,6 +13,12 @@ class Article extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    public function getTagsAttribute():array|false
+    {
+        return explode(",", $this->attributes['tags']);
+    }
+
+
     public function category():HasOne
     {
         return $this->hasOne(Category::class, "id", "category_id");
