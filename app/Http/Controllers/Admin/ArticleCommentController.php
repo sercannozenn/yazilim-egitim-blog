@@ -25,6 +25,23 @@ class ArticleCommentController extends Controller
 
         return view("admin.articles.comment-list", compact("comments", "users", "page"));
     }
+    public function list(Request $request)
+    {
+        $users = User::all();
+
+        $comments  = ArticleComment::query()
+            ->withTrashed()
+            ->with(['user', "article", "children", "article.user"])
+            ->status($request->status)
+            ->user($request->user_id)
+            ->createdDate($request->created_at)
+            ->searchText($request->search_text)
+            ->paginate(10);
+
+        $page = "commentList";
+
+        return view("admin.articles.comment-list", compact("comments", "users", "page"));
+    }
 
     public function changeStatus(Request $request)
     {
@@ -43,4 +60,35 @@ class ArticleCommentController extends Controller
                 "comment_status" => $comment->status])
             ->setStatusCode(200);
     }
+
+    public function delete(Request $request)
+    {
+        $comment = ArticleComment::findOrFail($request->id);
+
+        $comment->delete();
+
+        return response()->json(
+            [
+                'status' => "success",
+                "message" => "Başarılı",
+                "data" => $comment,
+                "comment_status" => $comment->status])
+            ->setStatusCode(200);
+    }
+
+    public function restore(Request $request )
+    {
+        $comment = ArticleComment::withTrashed()->findOrFail($request->id);
+        $comment->restore();
+
+        return response()->json(
+            [
+                'status' => "success",
+                "message" => "Başarılı",
+                "data" => $comment
+            ])
+            ->setStatusCode(200);
+
+    }
+
 }

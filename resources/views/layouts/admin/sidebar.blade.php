@@ -20,7 +20,10 @@
                     Dashboard
                 </a>
             </li>
-            <li class="{{ Route::is("article.index") || Route::is("article.create") ? "open" : "" }}">
+            <li class="{{ Route::is("article.index") ||
+                          Route::is("article.create") ||
+                          Route::is("article.comment.list") ||
+                          Route::is("article.pending-approval") ? "open" : "" }}">
                 <a href="#" class="">
                     <i class="material-icons">tune</i>
                     Makale Yönetimi
@@ -32,6 +35,9 @@
                     </li>
                     <li>
                         <a href="{{ route("article.index") }}" class="{{ Route::is("article.index") ? "active" : "" }}">Makale Listesi</a>
+                    </li>
+                    <li>
+                        <a href="{{ route("article.comment.list") }}" class="{{ Route::is("article.comment.list") ? "active" : "" }}">Yorum Listesi</a>
                     </li>
                     <li>
                         <a href="{{ route("article.pending-approval") }}" class="{{ Route::is("article.pending-approval") ? "active" : "" }}">Onay Bekleyen Yorumlar</a>

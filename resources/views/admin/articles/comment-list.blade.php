@@ -1,6 +1,10 @@
 @extends("layouts.admin")
 @section("title")
-    Onay Bekleyen Yorum Listesi
+    @if($page == "commentList")
+      Yorum Listesi
+    @else
+        Onay Bekleyen Yorum Listesi
+    @endif
 @endsection
 @section("css")
     <link rel="stylesheet" href="{{ asset("assets/plugins/select2/css/select2.min.css") }}">
@@ -19,11 +23,17 @@
 @section("content")
     <x-bootstrap.card>
         <x-slot:header>
-            <h2>Onay Bekleyen Yorum Listesi</h2>
+            <h2>
+                @if($page == "commentList")
+                    Yorum Listesi
+                @else
+                    Onay Bekleyen Yorum Listesi
+                @endif
+            </h2>
         </x-slot:header>
 
         <x-slot:body>
-            <form action="{{ route("article.pending-approval") }}" method="GET">
+            <form action="{{ $page == "commentList" ? route("article.comment.list") : route("article.pending-approval") }}" method="GET">
                 <div class="row">
 
                     <div class="col-3 my-2">
@@ -122,6 +132,16 @@
                                        data-id="{{ $comment->id }}">
                                         <i class="material-icons ms-0">delete</i>
                                     </a>
+                                    @if($comment->deleted_at)
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-primary btn-sm btnRestore"
+                                           data-name="{{ $comment->id }}"
+                                           data-id="{{ $comment->id }}"
+                                           title="Geri Al"
+                                        >
+                                            <i class="material-icons ms-0">undo</i>
+                                        </a>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -215,7 +235,7 @@
             });
 
             $('.btnDelete').click(function () {
-                let articleID = $(this).data('id');
+                let id = $(this).data('id');
                 let categoryName = $(this).data('name');
 
                 Swal.fire({
@@ -230,18 +250,69 @@
                     {
                         $.ajax({
                             method: "POST",
-                            url: "{{ route('article.delete') }}",
+                            url: "{{ route('article.pending-approval.delete') }}",
                             data: {
                                 "_method": "DELETE",
-                                articleID : articleID
+                                id : id
                             },
                             async:false,
                             success: function (data) {
 
-                                $('#row-' + articleID).remove();
+                                $('#row-' + id).remove();
                                 Swal.fire({
                                     title: "Başarılı",
-                                    text: "Makale Silindi",
+                                    text: "Yorum Silindi",
+                                    confirmButtonText: 'Tamam',
+                                    icon: "success"
+                                });
+                            },
+                            error: function (){
+                                console.log("hata geldi");
+                            }
+                        })
+
+                    }
+                    else if (result.isDenied)
+                    {
+                        Swal.fire({
+                            title: "Bilgi",
+                            text: "Herhangi bir işlem yapılmadı",
+                            confirmButtonText: 'Tamam',
+                            icon: "info"
+                        });
+                    }
+                })
+
+            });
+
+            $('.btnRestore').click(function () {
+                let id = $(this).data('id');
+                let categoryName = $(this).data('name');
+
+                let self = $(this);
+                Swal.fire({
+                    title: categoryName + ' i Geri almak istediğinize emin misiniz?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Evet',
+                    denyButtonText: `Hayır`,
+                    cancelButtonText: "İptal"
+                }).then((result) => {
+                    if (result.isConfirmed)
+                    {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('article.comment.restore') }}",
+                            data: {
+                                id : id
+                            },
+                            async:false,
+                            success: function (data) {
+
+                                self.remove();
+                                Swal.fire({
+                                    title: "Başarılı",
+                                    text: "Yorum Yayına Geri Alındı",
                                     confirmButtonText: 'Tamam',
                                     icon: "success"
                                 });

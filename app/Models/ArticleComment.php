@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
 class ArticleComment extends Model
 {
+    use SoftDeletes;
+
     protected $guarded = [];
 
     public function scopeApproveStatus($query)
@@ -20,6 +23,12 @@ class ArticleComment extends Model
     {
         if (!is_null($userID))
             return $query->where("user_id", $userID);
+    }
+
+    public function scopeStatus($query, $status)
+    {
+        if (!is_null($status))
+            return $query->where("status", $status);
     }
 
     public function scopeSearchText($query, $searchText)
