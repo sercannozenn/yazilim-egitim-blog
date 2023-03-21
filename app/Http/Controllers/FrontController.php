@@ -47,9 +47,36 @@ class FrontController extends Controller
         $settings = Settings::first();
         $categories = Category::query()->where("status", 1)->get();
 
-        $article = Article::query()->with("user")->where("slug", $articleSlug)->first();
+        $article = Article::query()->with([
+//            "user",
+            "user.articleLike",
+            "comments" => function($query)
+            {
+                $query->where("status", 1)
+                      ->whereNull("parent_id");
+            },
+            "comments.commentLikes",
+            "comments.user",
+            "comments.children" => function($query){
+                $query->where("status", 1);
+            },
+            "comments.children.user",
+            "comments.children.commentLikes"
+        ])
+            ->where("slug", $articleSlug)
+            ->first();
 
-        return view("front.article-detail", compact("article", "categories", "settings"));
+        $userLike = $article
+            ->articleLikes
+            ->where("article_id", $article->id)
+            ->where("user_id", \auth()->id())
+            ->first();
+
+
+        $article->increment("view_count");
+        $article->save();
+
+        return view("front.article-detail", compact("article", "categories", "settings", "userLike"));
     }
 
     public function articleComment(Request $request, Article $article)

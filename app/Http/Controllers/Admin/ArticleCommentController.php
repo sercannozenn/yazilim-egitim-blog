@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ArticleComment;
 use App\Models\User;
+use App\Models\UserLikeComment;
 use Illuminate\Http\Request;
 
 class ArticleCommentController extends Controller
@@ -81,14 +82,47 @@ class ArticleCommentController extends Controller
         $comment = ArticleComment::withTrashed()->findOrFail($request->id);
         $comment->restore();
 
-        return response()->json(
-            [
+        return response()
+            ->json([
                 'status' => "success",
                 "message" => "Başarılı",
-                "data" => $comment
-            ])
+                "data" => $comment])
             ->setStatusCode(200);
+    }
 
+    public function favorite(Request $request)
+    {
+        $comment = ArticleComment::query()
+            ->with(['commentLikes' => function($query)
+            {
+                $query->where("user_id", auth()->id());
+            }])
+            ->where("id", $request->id)
+            ->firstOrFail();
+
+
+        if ($comment->commentLikes->count())
+        {
+            $comment->commentLikes()->delete();
+            $comment->like_count--;
+            $process = 0;
+            //            UserLikeArticle::query()->where("user_id", auth()->id())->where("article_id", $article->id)->delete();
+        }
+        else
+        {
+            UserLikeComment::create([
+                'user_id' => auth()->id(),
+                "comment_id" => $comment->id
+            ]);
+            $comment->like_count++;
+            $process = 1;
+        }
+
+       $comment->save();
+
+        return response()
+            ->json(['status' => "success", "message" => "Başarılı", "like_count" => $comment->like_count, "process" => $process])
+            ->setStatusCode(200);
     }
 
 }

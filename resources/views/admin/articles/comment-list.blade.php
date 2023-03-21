@@ -287,11 +287,10 @@
 
             $('.btnRestore').click(function () {
                 let id = $(this).data('id');
-                let categoryName = $(this).data('name');
 
                 let self = $(this);
                 Swal.fire({
-                    title: categoryName + ' i Geri almak istediğinize emin misiniz?',
+                    title: id + ' i Geri almak istediğinize emin misiniz?',
                     showDenyButton: true,
                     showCancelButton: true,
                     confirmButtonText: 'Evet',
@@ -341,6 +340,7 @@
             $("#created_at").flatpickr({
                 dateFormat: "Y-m-d",
             });
+
             $(".lookComment").click(function (){
                let comment = $(this).data("comment");
                $('#modalBody').text(comment);

@@ -77,4 +77,13 @@ class User extends Authenticatable
         return $this->hasMany(Category::class, "user_id", "id");
     }
 
+    public function articleLike():HasMany
+    {
+        return $this->hasMany(UserLikeArticle::class, "user_id", "id");
+    }
+    public function commentLike():HasMany
+    {
+        return $this->hasMany(UserLikeComment::class, "user_id", "id");
+    }
+
 }
