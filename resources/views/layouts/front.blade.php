@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <link href="{{ asset("assets/front/material-icons/iconfont/material-icons.css") }}" rel="stylesheet">
+    <link href="{{ asset("assets/front/font-awesome/css/font-awesome.min.css") }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset("assets/front/swiper/swiper-bundle.min.css") }}">
 
@@ -73,11 +74,51 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
+
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                         </li>
                     </ul>
+                    @auth
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex text-orange" href="#">
+                                    <i class="fa fa-user me-1 d-flex align-items-center"></i>
+                                    {{ auth()->user()->username }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex text-orange" href="javascript:void(0)"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fa fa-close me-1 d-flex align-items-center"></i>
+                                    Çıkış Yap
+                                </a>
+                                <form action="{{ route("logout") }}" method="POST" id="logout-form">
+                                    @csrf
+                                </form>
+                            </li>
+
+                        </ul>
+
+                    @else
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex text-orange" href="{{ route("register") }}">
+                                    <span class="material-icons-outlined align-items-center me-1">app_registration</span>
+                                    Kayıt
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex text-orange" href="{{ route("user.login") }}">
+                                    <span class="material-icons-outlined align-items-center me-1">how_to_reg</span>
+                                    Giriş
+                                </a>
+                            </li>
+
+                        </ul>
+                    @endauth
+
                 </div>
             </nav>
         </div>

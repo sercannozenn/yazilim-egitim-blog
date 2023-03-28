@@ -17,6 +17,9 @@ body{
 .bg-orange{
     background-color: #ee8606;
 }
+.text-orange{
+    color: #ee8606;
+}
 
 
 .header-border{
@@ -28,7 +31,7 @@ body{
 
 .header-text p {
     margin: inherit;
-    
+
 }
 .logo-h{
     max-height: 30px;
@@ -168,7 +171,7 @@ code {
     background-color: #ee8606;
     color: #fff;
 }
-.favorite-article{
+.favorite-article, .social-media-register a{
     text-decoration: none;
     color: inherit;
 }
@@ -214,7 +217,7 @@ code {
     color: inherit;
     font-size: 13px;
 }
-.response-form input, .response-form textarea{
+.response-form input, .response-form textarea, .register-form input{
     border: unset;
     border-radius: unset;
     border-bottom: 1px solid #9ea1a2;

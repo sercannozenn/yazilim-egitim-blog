@@ -9,21 +9,28 @@ use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class FrontController extends Controller
 {
+    public function __construct()
+    {
+
+
+    }
+
     public function home()
     {
-        $settings = Settings::first();
-        $categories = Category::query()->where("status", 1)->get();
+//        $settings = Settings::first();
+//        $categories = Category::query()->where("status", 1)->get();
 
-        return view("front.index", compact("settings", "categories"));
+        return view("front.index");
     }
 
     public function category(Request $request, string $slug)
     {
-        $settings = Settings::first();
-        $categories = Category::query()->where("status", 1)->get();
+//        $settings = Settings::first();
+//        $categories = Category::query()->where("status", 1)->get();
 
 //        $category = Category::query()->with("articlesActive")->where("slug", $slug)->first();
 //        $articles = $category->articlesActive()->paginate(2);
@@ -38,14 +45,14 @@ class FrontController extends Controller
 
 
 
-        return view("front.article-list", compact( "categories", "settings", "articles"));
+        return view("front.article-list", compact(  "articles"));
 
     }
 
     public function articleDetail(Request $request, string $username, string $articleSlug)
     {
-        $settings = Settings::first();
-        $categories = Category::query()->where("status", 1)->get();
+//        $settings = Settings::first();
+//        $categories = Category::query()->where("status", 1)->get();
 
         $article = Article::query()->with([
 //            "user",
@@ -76,7 +83,7 @@ class FrontController extends Controller
         $article->increment("view_count");
         $article->save();
 
-        return view("front.article-detail", compact("article", "categories", "settings", "userLike"));
+        return view("front.article-detail", compact("article",  "userLike"));
     }
 
     public function articleComment(Request $request, Article $article)

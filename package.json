@@ -10,6 +10,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "font-awesome": "^4.7.0",
         "sweetalert2": "^11.7.3"
     }
 }
