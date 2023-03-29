@@ -52,6 +52,7 @@ class UserRegisteredObserver
      */
     public function forceDeleted(User $user): void
     {
+
         //
     }
 }
