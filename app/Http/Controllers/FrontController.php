@@ -51,27 +51,21 @@ class FrontController extends Controller
 
     public function articleDetail(Request $request, string $username, string $articleSlug)
     {
-//        $settings = Settings::first();
-//        $categories = Category::query()->where("status", 1)->get();
+        $article = session()->get("last_article");
+        $visitedArticles = session()->get("visited_articles");
 
-        $article = Article::query()->with([
-//            "user",
-            "user.articleLike",
-            "comments" => function($query)
-            {
-                $query->where("status", 1)
-                      ->whereNull("parent_id");
-            },
-            "comments.commentLikes",
-            "comments.user",
-            "comments.children" => function($query){
-                $query->where("status", 1);
-            },
-            "comments.children.user",
-            "comments.children.commentLikes"
-        ])
-            ->where("slug", $articleSlug)
-            ->first();
+        $visitedArticlesCategoryIds = Article::query()
+            ->whereIn("id", $visitedArticles)
+            ->pluck("category_id");
+
+        $suggestArticles = Article::query()
+            ->with(['user', 'category'])
+            ->whereIn("category_id", $visitedArticlesCategoryIds)
+            ->whereNotIn("id", $visitedArticles)
+            ->limit(6)
+            ->get();
+
+
 
         $userLike = $article
             ->articleLikes
@@ -83,7 +77,8 @@ class FrontController extends Controller
         $article->increment("view_count");
         $article->save();
 
-        return view("front.article-detail", compact("article",  "userLike"));
+        return view("front.article-detail",
+            compact("article",  "userLike", 'suggestArticles'));
     }
 
     public function articleComment(Request $request, Article $article)
