@@ -8,6 +8,7 @@ $('#searchIcon2').click(function () {
 $('#searchIcon1').click(function () {
     $(this).hide();
     $('#searchForm').show();
+    $('#search_text').focus();
 });
 
 

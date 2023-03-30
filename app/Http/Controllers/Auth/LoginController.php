@@ -48,6 +48,8 @@ class LoginController extends Controller
         {
             Auth::login($user, $remember);
 
+            \Log::notice("User login: $user->name", $user->toArray());
+
             $userIsAdmin = Auth::user()->is_admin;
             if (!$userIsAdmin)
                 return redirect()->route("home");

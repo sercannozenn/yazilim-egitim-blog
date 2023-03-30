@@ -6,13 +6,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "arcanedev/log-viewer": "^10.0",
         "barryvdh/laravel-debugbar": "^3.8",
+        "freshbitsweb/laravel-log-enhancer": "^1.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.6",
         "laravel/tinker": "^2.8",
         "predis/predis": "^2.1",
+        "rap2hpoutre/laravel-log-viewer": "^2.3",
         "realrashid/sweet-alert": "^6.0",
         "unisharp/laravel-filemanager": "^2.6"
     },
@@ -30,7 +33,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

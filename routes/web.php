@@ -26,6 +26,8 @@ Route::prefix("admin")->middleware(['auth', 'verified'])->group(function()
         Route::group(['prefix' => 'filemanager'], function () {
             \UniSharp\LaravelFilemanager\Lfm::routes();
         });
+        Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+
 
         Route::get('/', function () {
             return view('admin.index');
@@ -74,6 +76,8 @@ Route::prefix("admin")->middleware(['auth', 'verified'])->group(function()
     Route::post('article/comment-favorite', [ArticleCommentController::class, 'favorite'])->name("article.comment.favorite");
 
 });
+
+
 Route::get("admin/login", [LoginController::class, "showLogin"])->name("login");
 Route::post("admin/login", [LoginController::class, "login"]);
 
@@ -82,6 +86,7 @@ Route::post("admin/login", [LoginController::class, "login"]);
 
 
 Route::get('/', [FrontController::class, "home"])->name("home");
+Route::get("makaleler", [FrontController::class, "articleList"])->name("front.articleList");
 Route::get("/kategoriler/{category:slug}", [FrontController::class, "category"])->name("front.categoryArticles");
 Route::get("/yazarlar/{user:username}", [FrontController::class, "authorArticles"])->name("front.authorArticles");
 Route::get("/@{user:username}/{article:slug}", [FrontController::class, "articleDetail"])->name("front.articleDetail")->middleware("visitedArticle");
