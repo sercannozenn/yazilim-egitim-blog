@@ -6,6 +6,9 @@
     <section class="row">
         <div class="col-12 bg-white rounded-1 shadow-sm">
             <div class="article-wrapper">
+                <div class="article-category article-header-author">
+
+                </div>
                 <div class="article-header font-lato d-flex justify-content-between pb-4">
                     <div class="article-header-date">
 
@@ -18,11 +21,16 @@
                                 $class = ["text-danger", "text-warning", "text-primary", "text-success"];
                                 $randomClass = $class[random_int(0,3)];
                             @endphp
-                            <span class="{{ $randomClass }}">{{ $tag }}</span>
+                                <a href="{{ route('front.search', ['q' => $tag]) }}">
+                                    <span class="{{ $randomClass }}">{{ $tag }}</span>
+                                </a>
                         @endforeach
                     </div>
                     <div class="article-header-author">
-                        Yazar: <a href="#"><strong>{{ $article->user->name }}</strong></a>
+                        Yazar: <a href="#"><strong>{{ $article->user->name }}</strong></a><br>
+                        Kategori: <a href="" class="category-link">
+                            {{ $article->category->name }}
+                        </a>
                     </div>
 
                 </div>
@@ -71,13 +79,13 @@
             </div>
             @if(isset($suggestArticles) && count($suggestArticles))
                 <div class="mt-5">
-                    <div class="swiper-most-popular mt-3">
+                    <div class="swiper-suggest-article mt-3">
                         <div class="swiper-wrapper">
                             @foreach($suggestArticles as $article)
                                 @php
                                 $image = $article->image;
                                 $publishDate = \Carbon\Carbon::parse($article->publish_date)->format("d-m-Y");
-                                if (!file_exists(public_path($image)))
+                                if (!file_exists(public_path($image)) || is_null($image))
                                  {
                                       $image = $settings->article_default_image;
                                  }
@@ -96,7 +104,7 @@
                                                 Yazar: <a href="#">{{ $article->user->name }}</a>
                                             </div>
                                             <div class="text-end">Kategori:
-                                                <a href="{{ route('front.category', ['category' => $article->category->slug]) }}">
+                                                <a href="{{ route('front.categoryArticles', ['category' => $article->category->slug]) }}">
                                                     {{ $article->category->name }}
                                                 </a>
                                             </div>

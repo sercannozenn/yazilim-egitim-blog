@@ -22,6 +22,20 @@ $(document).ready(function () {
         spaceBetween: 30,
         slidesPerView: 3,
     });
+    const suggest = new Swiper('.swiper-suggest-article', {
+        loop: true,
+        navigation: {
+            nextEl: '.most-popular-swiper-button-next',
+            prevEl: '.most-popular-swiper-button-prev',
+        },
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false
+        },
+        speed: 1000,
+        spaceBetween: 30,
+        slidesPerView: 3,
+    });
     const youtube = new Swiper('.swiper-youtube', {
         loop: true,
         speed: 1000,

@@ -45,9 +45,9 @@
             </div>
             <div class="header-search align-items-center">
                 <span class="material-icons" id="searchIcon1">search</span>
-                <form action="" class="position-relative" style="display: none" id="searchForm">
-                    <input type="text" name="search_text" id="search_text" placeholder="Search">
-                    <span class="material-icons position-absolute" id="searchIcon2" style="right: 0; top: 0; bottom: 0;">search</span>
+                <form action="{{ route('front.search') }}" class="position-relative" style="display: none" id="searchForm">
+                    <input type="text" name="q" id="search_text" placeholder="Ara...">
+                    <span class="material-icons position-absolute" onclick="$('#searchForm').submit()" id="searchIcon2" style="right: 0; top: 0; bottom: 0;">search</span>
                 </form>
             </div>
         </div>
@@ -138,7 +138,7 @@
                     <ul class="list-group m-0">
                         @foreach($categories as $category)
                             <li class="px-3 py-3">
-                                <a href="{{ route('front.category', ['category' => $category->slug]) }}">{{ $category->name }}
+                                <a href="{{ route('front.categoryArticles', ['category' => $category->slug]) }}">{{ $category->name }}
                                     <span class="float-end me-3" style="color: {{ $category->color }}">&#x25CF;</span>
                                 </a>
                             </li>

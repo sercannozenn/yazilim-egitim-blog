@@ -78,7 +78,7 @@ body{
     text-decoration: none;
 }
 
-.swiper-most-popular, .swiper-youtube, .swiper-authors {
+.swiper-most-popular, .swiper-youtube, .swiper-authors, .swiper-suggest-article {
     width: 100%;
     /*height: 350px;*/
     margin-left: auto;
@@ -171,7 +171,7 @@ code {
     background-color: #ee8606;
     color: #fff;
 }
-.favorite-article, .social-media-register a{
+.favorite-article, .social-media-register a, .article-header-date a{
     text-decoration: none;
     color: inherit;
 }
@@ -222,7 +222,9 @@ code {
     border-radius: unset;
     border-bottom: 1px solid #9ea1a2;
 }
-
+a.category-link:hover{
+    color: #ee8606;
+}
 @media screen and (max-width: 768px) {
 
 }
