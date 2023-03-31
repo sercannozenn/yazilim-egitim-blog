@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Database\Concerns\BuildsQueries;
@@ -13,6 +15,8 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -28,6 +32,24 @@ class LoginController extends Controller
         return view ("front.auth.login");
     }
 
+    public function showPasswordReset()
+    {
+        return view("front.auth.reset-password");
+    }
+
+    public function showPasswordResetConfirm(Request $request)
+    {
+        $token = $request->token;
+
+        $tokenExist = DB::table('password_reset_tokens')->where('token', $token)->first();
+
+        if (!$tokenExist)
+        {
+            abort(404);
+        }
+
+        return view("front.auth.reset-password", compact("token"));
+    }
 
     public function showRegister()
     {
@@ -232,5 +254,71 @@ class LoginController extends Controller
     public function checkUsername(string $username): null|object
     {
         return User::query()->where("username", $username)->first();
+    }
+
+    public function sendPasswordReset(Request $request)
+    {
+        $email = $request->email;
+        $find = User::query()->where("email", $email)->firstOrFail();
+
+
+        $tokenFind = DB::table('password_reset_tokens')->where("email", $email)->first();
+        if ($tokenFind)
+        {
+            $token = $tokenFind->token;
+        }
+        else
+        {
+            $token = Str::random(60);
+            DB::table("password_reset_tokens")->insert([
+                'email' => $email,
+                'token' => $token,
+                'created_at' => now()
+            ]);
+        }
+
+        if ($tokenFind && now()->diffInHours($tokenFind->created_at) < 5)
+        {
+            alert()
+                ->info('Başarılı', "Daha önce sıfırlama maili mailinize gönderilmiştir. Bir kaç saat sonra tekrar deneyebilirsiniz.")
+                ->showConfirmButton('Tamam', '#3085d6')
+                ->autoClose(5000);
+
+            return redirect()->back();
+        }
+
+        Mail::to($find->email)->send(new ResetPasswordMail($find, $token));
+
+        alert()
+            ->success('Başarılı', "Parola sıfırlama maili gönderilmiştir.")
+            ->showConfirmButton('Tamam', '#3085d6')
+            ->autoClose(5000);
+
+        return redirect()->back();
+
+    }
+
+    public function passwordReset(PasswordResetRequest $request)
+    {
+        $tokenQuery = DB::table("password_reset_tokens")->where('token', $request->token);
+        $tokenExist = $tokenQuery->first();
+        if (!$tokenExist)
+            abort(404);
+
+        $userExist= User::query()->where('email', $tokenExist->email)->first();
+        if (!$userExist)
+            abort(400, 'Lütfen yöneticiyle iletişime geçin');
+
+        $userExist->update(['password' => Hash::make($request->password)]);
+
+
+        $tokenQuery->delete();
+
+        alert()
+            ->success('Başarılı', "Parolanız sıfırlanmıştır. Giriş yapabilirsiniz.")
+            ->showConfirmButton('Tamam', '#3085d6')
+            ->autoClose(5000);
+
+        return redirect()->route('user.login');
     }
 }

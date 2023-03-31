@@ -38,8 +38,13 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12">
-                                <hr class="my-4">
+                            <div class="col-md-12 mt-4">
+                                <div class="d-flex justify-content-end">
+                                    <small>
+                                        <a class="btn-password-reset" href="{{ route('passwordReset') }}">Parolamı Unuttum</a>
+                                    </small>
+                                </div>
+                                <hr class="m-0 mb-4">
 
                                 <button class="btn btn-success w-100">GİRİŞ YAP</button>
                             </div>

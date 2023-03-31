@@ -79,6 +79,7 @@
                         @if(isset($settings) && $settings->logo)
                             <img src="{{ asset($settings->logo) }}" alt="" class="img-fluid" style="max-height: 200px">
                         @endif
+                        <hr>
 
 
                         <label for="image" class="form-label m-t-sm">Kategori Varsayılan Görseli</label>
@@ -89,6 +90,8 @@
                             <img src="{{ asset($settings->category_default_image) }}" alt="" class="img-fluid" style="max-height: 200px">
                         @endif
 
+                        <hr>
+
                         <label for="image" class="form-label m-t-sm">Makale Varsayılan Görseli</label>
                         <input type="file" name="article_default_image" id="article_default_image" class="form-control" accept="image/png, image/jpeg, image/jpg">
                         <div class="form-text m-b-sm">Makale Varsayılan Görseli Maksimum 2mb olmalıdır</div>
@@ -97,6 +100,17 @@
                             <img src="{{ asset($settings->article_default_image) }}" alt="" class="img-fluid" style="max-height: 200px">
                         @endif
 
+                        <hr>
+
+                        <label for="image" class="form-label m-t-sm">Parola Sıfırlama Maili Görseli</label>
+                        <input type="file" name="reset_password_image" id="reset_password_image" class="form-control" accept="image/png, image/jpeg, image/jpg">
+                        <div class="form-text m-b-sm">Parola Sıfırlama Maili Görseli Maksimum 2mb olmalıdır</div>
+
+                        @if(isset($settings) && $settings->reset_password_image)
+                            <img src="{{ asset($settings->reset_password_image) }}" alt="" class="img-fluid" style="max-height: 200px">
+                        @endif
+
+                        <hr>
 
                         <div class="form-check mt-5">
                             <input class="form-check-input" type="checkbox"
@@ -145,25 +159,25 @@
 @section("js")
     <script src="{{ asset("assets/plugins/summernote/summernote-lite.min.js") }}"></script>
     <script src="{{ asset("assets/admin/js/pages/text-editor.js") }}"></script>
+    <script src="{{ asset("assets/admin/js/custom.js") }}"></script>
     <script>
-        let name = $('#name');
-
         $(document).ready(function ()
         {
+
             $('#btnSave').click(function () {
-               // if(name.val().trim() === "" || name.val().trim() == null)
-               // {
-               //     Swal.fire({
-               //         title: "Uyarı",
-               //         text: "Kategori adı boş geçilemez",
-               //         confirmButtonText: 'Tamam',
-               //         icon: "info"
-               //     });
-               // }
-               // else
-               // {
-                   $("#settingsForm").submit();
-               // }
+                let logoCheckStatus = imageCheck($('#logo'));
+                let category_default_imageStatus = imageCheck($('#category_default_image'));
+                let article_default_imageStatus = imageCheck($('#article_default_image'));
+                let reset_password_imageStatus = imageCheck($('#reset_password_image'));
+
+                if(!logoCheckStatus || !category_default_imageStatus || !article_default_imageStatus || !reset_password_imageStatus)
+                {
+                    return false;
+                }
+                else
+                {
+                    $("#settingsForm").submit();
+                }
             });
         });
     </script>

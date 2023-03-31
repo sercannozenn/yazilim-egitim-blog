@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class SettingsRequest extends FormRequest
+class PasswordResetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +23,7 @@ class SettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "logo" => ['image', 'mimetypes:image/jpeg,image/jpg,image/png', "max:2048"],
-            "category_default_image" => ['image', 'mimetypes:image/jpeg,image/jpg,image/png', "max:2048"],
-            "article_default_image" => ['image', 'mimetypes:image/jpeg,image/jpg,image/png', "max:2048"],
-            "reset_password_image" => ['image', 'mimetypes:image/jpeg,image/jpg,image/png', "max:2048"]
-
+            'password' => ['required', 'confirmed', Password::min(5)->symbols()->mixedCase()->letters()->numbers()]
         ];
     }
 }

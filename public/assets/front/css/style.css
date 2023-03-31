@@ -206,11 +206,11 @@ code {
 .articles-response-comment-wrapper{
 
 }
-.like-comment{
+.like-comment, .btn-password-reset{
     text-decoration: none;
     color: inherit;
 }
-.like-comment:hover{
+.like-comment:hover, .btn-password-reset:hover{
     color: #ee8606;
 }
 .comment-title-date time{

@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
 
         Carbon::setLocale(config("app.locale"));
 
-        View::composer(['front.*', 'mail::header'], function($view){
+        View::composer(['front.*', 'mail::header', 'email.*'], function($view){
 //            dd($view);
             $settings = Settings::first();
             $categories = Category::query()->where("status", 1)->get();
