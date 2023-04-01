@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Category extends Model
 {
@@ -27,10 +28,6 @@ class Category extends Model
     {
         if (!is_null($description))
             return $query->where("description", "LIKE", "%" . $description . "%");
-//        dd($query->getQuery()->wheres );
-//        dd($query->query->wheres);
-//        if (!is_null($name))
-//            return $query->where("name", "LIKE", "%" . $name . "%");
     }
     public function scopeSlug($query, $slug)
     {
@@ -88,6 +85,11 @@ class Category extends Model
             ->where("status", 1)
             ->whereNotNull("publish_date")
             ->where("publish_date", "<=", now());
+    }
+
+    public function logs(): MorphMany
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 
 
