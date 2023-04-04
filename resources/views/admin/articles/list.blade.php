@@ -23,7 +23,7 @@
         </x-slot:header>
 
         <x-slot:body>
-            <form action="{{ route("article.index") }}" method="GET">
+            <form action="{{ route("article.index") }}" method="GET" id="formFilter">
                 <div class="row">
 
                     <div class="col-3 my-2">
@@ -90,7 +90,7 @@
                     <hr>
                     <div class="col-6 mb-2 d-flex">
                         <button class="btn btn-primary w-50 me-4" type="submit">Filtrele</button>
-                        <button class="btn btn-warning w-50" type="button">Filtreyi Temizle</button>
+                        <button class="btn btn-warning w-50" type="button" id="btnClearFilter">Filtreyi Temizle</button>
                     </div>
                     <hr>
                 </div>
@@ -174,7 +174,6 @@
     <script src="{{ asset("assets/js/pages/select2.js") }}"></script>
     <script src="{{ asset("assets/plugins/flatpickr/flatpickr.js") }}"></script>
     <script src="{{ asset("assets/js/pages/datepickers.js") }}"></script>
-    <script src="{{ asset("assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
     <script src="{{ asset("assets/admin/plugins/bootstrap/js/popper.min.js") }}"></script>
     <script>
         $(document).ready(function ()
@@ -301,8 +300,5 @@
             dateFormat: "Y-m-d H:i",
         });
 
-        const popover = new bootstrap.Popover('.example-popover', {
-            container: 'body'
-        })
     </script>
 @endsection

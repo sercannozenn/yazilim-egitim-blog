@@ -120,6 +120,14 @@ class ArticleController extends Controller
         }
         $data["user_id"] = auth()->id();
 
+        $status = 0;
+        if (isset($data['status']))
+        {
+            $status = 1;
+        }
+        $data['status'] = $status;
+
+
         Article::create($data);
         if (!is_null($request->image))
         {
@@ -152,28 +160,49 @@ class ArticleController extends Controller
 
     public function update(ArticleUpdateRequest $request)
     {
+        $articleQuery = Article::query()
+            ->where("id", $request->id);
+
+        $articleFind = $articleQuery->first();
+
         $data = $request->except("_token");
-        $slug = $data['slug'] ?? $data["title"];
+        $slug = $articleFind->title != $data['title'] ? $data['title'] : ($data['slug'] ?? $data["title"]);
         $slug = Str::slug($slug);
         $slugTitle = Str::slug($data["title"]);
 
-        $checkSlug = $this->slugCheck($slug);
 
-        if (!is_null($checkSlug))
+
+        if ($articleFind->slug != $slug)
         {
-            $checkTitleSlug = $this->slugCheck($slugTitle);
-            if (!is_null($checkTitleSlug))
-            {
-                // Title Slug dolu geldiyse
-                $slug = Str::slug($slug . time());
-            }
-            else
-            {
-                $slug = $slugTitle;
-            }
-        }
+            $checkSlug = $this->slugCheck($slug);
 
-        $data["slug"] = $slug;
+            if (!is_null($checkSlug))
+            {
+                $checkTitleSlug = $this->slugCheck($slugTitle);
+                if (!is_null($checkTitleSlug))
+                {
+                    $slug = Str::slug($slug . time());
+                }
+                else
+                {
+                    $slug = $slugTitle;
+                }
+            }
+
+            $data["slug"] = $slug;
+        }
+        else
+//            if (empty($data['slug']) && !is_null($articleFind->slug))
+        {
+            unset($data['slug']);
+        }
+//        else
+//        {
+//            unset($data['slug']);
+//        }
+
+
+
         if (!is_null($request->image))
         {
             $imageFile = $request->file("image");
@@ -198,11 +227,13 @@ class ArticleController extends Controller
 
         }
         $data["user_id"] = auth()->id();
+        $status = 0;
+        if (isset($data['status']))
+        {
+            $status = 1;
+        }
+        $data['status'] = $status;
 
-        $articleQuery = Article::query()
-            ->where("id", $request->id);
-
-        $articleFind = $articleQuery->first();
 
         $articleQuery->first()->update($data);
 

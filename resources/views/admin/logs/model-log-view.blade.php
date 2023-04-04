@@ -167,7 +167,6 @@
                     @endif
                 </td>
             </tr>
-
             <tr>
                 <td>category_default_image</td>
                 <td>
@@ -189,6 +188,52 @@
                 <td>
                     @if(!empty($data->default_comment_profile_image))
                         <img src="{{ asset($data->default_comment_profile_image) }}" height="60" data-aos="flip-right">
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    header_text
+                </td>
+                <td>
+                    {!! $data->header_text !!}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    footer_text
+                </td>
+                <td>
+                    {!!  $data->footer_text !!}
+                </td>
+            </tr>
+            <tr>
+                <td>Feature Article Is Active</td>
+                <td>
+                    @if($data->feature_categories_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktif</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Pasif</a>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>Video Is Active</td>
+                <td>
+                    @if($data->video_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktif</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Pasif</a>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>Author Is Active</td>
+                <td>
+                    @if($data->author_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktif</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Pasif</a>
                     @endif
                 </td>
             </tr>

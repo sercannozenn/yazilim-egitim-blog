@@ -28,7 +28,7 @@
         </x-slot:header>
 
         <x-slot:body>
-            <form action="{{ route("user.index") }}" method="GET">
+            <form action="{{ route("user.index") }}" method="GET" id="formFilter">
                 <div class="row">
 
 
@@ -53,7 +53,7 @@
                     <hr>
                     <div class="col-6 mb-2 d-flex">
                         <button class="btn btn-primary w-50 me-4" type="submit">Filtrele</button>
-                        <button class="btn btn-warning w-50" type="button">Filtreyi Temizle</button>
+                        <button class="btn btn-warning w-50" type="button" id="btnClearFilter">Filtreyi Temizle</button>
                     </div>
                     <hr>
                 </div>
