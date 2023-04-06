@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserLikeArticle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use function PHPUnit\Framework\fileExists;
@@ -166,10 +167,11 @@ class ArticleController extends Controller
         $articleFind = $articleQuery->first();
 
         $data = $request->except("_token");
+
+
         $slug = $articleFind->title != $data['title'] ? $data['title'] : ($data['slug'] ?? $data["title"]);
         $slug = Str::slug($slug);
         $slugTitle = Str::slug($data["title"]);
-
 
 
         if ($articleFind->slug != $slug)
@@ -199,6 +201,22 @@ class ArticleController extends Controller
 //        else
 //        {
 //            unset($data['slug']);
+//        }
+
+
+
+//        if ($articleFind->title != $data['title'] || $articleFind->slug != $data['slug'])
+//        {
+//            if (Cache::has("most_popular_articles"))
+//            {
+//                $mpA = Cache::get("most_popular_articles");
+//                $mpA->where("title", $articleFind->title)->first()->update([
+//                    'title' =>  $data['title'],
+//                    'slug' => $slug
+//                ]);
+//                Cache::put("most_popular_articles", $mpA, 3600);
+//            }
+//            //            Cache::forget("most_popular_articles");
 //        }
 
 

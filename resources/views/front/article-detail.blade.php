@@ -33,8 +33,8 @@
 
                     </div>
                     <div class="article-header-author">
-                        Yazar: <a href="#"><strong>{{ $article->user->name }}</strong></a><br>
-                        Kategori: <a href="" class="category-link">
+                        Yazar: <a href="{{ route("front.authorArticles",['user' => $article->user->username ] ) }}"><strong>{{ $article->user->name }}</strong></a><br>
+                        Kategori: <a href="{{ route("front.categoryArticles", ['category' => $article->category->slug]) }}" class="category-link">
                             {{ $article->category->name }}
                         </a>
                     </div>
@@ -70,7 +70,7 @@
                     </a>
                     <span class="fw-light" id="favoriteCount">{{ $article->like_count }}</span>
                 </div>
-                <a href="javascript:void(0)" class="btn-response btnArticleResponse">Cevap Ver</a>
+                <a href="javascript:void(0)" class="btn-response btnArticleResponse">Yorum Yap</a>
 
             </div>
 
@@ -78,7 +78,7 @@
                 <div class="bg-white p-4 d-flex justify-content-between align-items-center shadow-sm">
                     <img src="{{ imageExist($article->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                     <div class="px-5 me-auto">
-                        <h4 class="mt-3"><a href="">{{ $article->user->name }}</a></h4>
+                        <h4 class="mt-3"><a href="{{ route('front.authorArticles', ['user' => $article->user->username]) }}">{{ $article->user->name }}</a></h4>
                         {!! $article->user->about !!}
                     </div>
                 </div>
@@ -87,36 +87,36 @@
                 <div class="mt-5">
                     <div class="swiper-suggest-article mt-3">
                         <div class="swiper-wrapper">
-                            @foreach($suggestArticles as $article)
+                            @foreach($suggestArticles as $suggestArticle)
 
                                 <div class="swiper-slide">
                                     <a href="{{ route('front.articleDetail', [
                                     'user' => $article->user,
                                     'article' => $article->slug
                                 ]) }}">
-                                        <img src="{{ imageExist($article->image, $settings->article_default_image) }}" class="img-fluid">
+                                        <img src="{{ imageExist($suggestArticle->image, $settings->article_default_image) }}" class="img-fluid">
                                     </a>
 
                                     <div class="most-popular-body mt-2">
                                         <div class="most-popular-author d-flex justify-content-between">
                                             <div>
-                                                Yazar: <a href="#">{{ $article->user->name }}</a>
+                                                Yazar: <a href="{{ route("front.authorArticles",['user' => $suggestArticle->user->username ] ) }}">{{ $article->user->name }}</a>
                                             </div>
                                             <div class="text-end">Kategori:
-                                                <a href="{{ route('front.categoryArticles', ['category' => $article->category->slug]) }}">
-                                                    {{ $article->category->name }}
+                                                <a href="{{ route('front.categoryArticles', ['category' => $suggestArticle->category->slug]) }}">
+                                                    {{ $suggestArticle->category->name }}
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="most-popular-title">
                                             <h4 class="text-black">
-                                                <a href="#">
-                                                    {{ $article->title }}
+                                                <a href="{{ route('front.articleDetail', [ 'user' => $suggestArticle->user->username, 'article' => $suggestArticle->slug ]) }}">
+                                                    {{ $suggestArticle->title }}
                                                 </a>
                                             </h4>
                                         </div>
                                         <div class="most-popular-date">
-                                            <span>{{ $article->format_publish_date }}</span> &#x25CF; <span>10 dk</span>
+                                            <span>{{ $suggestArticle->format_publish_date }}</span> &#x25CF; <span>10 dk</span>
                                         </div>
                                     </div>
                                 </div>
@@ -130,13 +130,13 @@
         </section>
 
         <section class="article-responses mt-4">
-            <div class="response-form bg-white shadow-sm rounded-1 p-4" style="display: none">
+            <div class="response-form bg-white shadow-sm rounded-1 p-4 d-none" id="newComment" >
                 <form action="{{ route("article.comment", ['article' => $article->id]) }}" method="POST">
                     @csrf
                     <input type="hidden" name="parent_id" id="comment_parent_id" value="{{ null }}">
                     <div class="row">
                         <div class="col-12">
-                            <h5>Cevabınız</h5>
+                            <h5>Yorumunuz</h5>
                             <hr>
                         </div>
 
@@ -160,8 +160,14 @@
             </div>
 
             <div class="response-body p-4">
-                <h3>Makaleye Verilen Cevaplar</h3>
+                <h3>Yorumlar</h3>
                 <hr class="mb-4">
+                @if($article->comments->count() == 0)
+                    <div class="alert alert-info">
+                        Henüz yorum yapılmamıştır.
+                    </div>
+                @endif
+
 
                 @foreach($article->comments as $comment)
                     <div class="article-response-wrapper">
@@ -178,7 +184,7 @@
                                     }
                                 @endphp
 
-                                <img src="{{ imageExist($comment->user->image,$settings->default_comment_profile_image ) }}" alt="" width="75" height="75">
+                                <img src="{{ imageExist($comment->user?->image,$settings->default_comment_profile_image ) }}" alt="" width="75" height="75">
                             </div>
                             <div class="col-md-10">
                                 <div class="px-3">
@@ -191,7 +197,7 @@
                                     <p class="text-secondary">{{ $comment->comment }}</p>
                                     <div class="d-flex  align-items-center justify-content-between">
                                         <div>
-                                            <a href="javascript:void(0)" class="btn-response btnArticleResponseComment" data-id="{{ $comment->id }}">Cevap Ver</a>
+                                            <a href="javascript:void(0)" class="btn-response btnArticleResponseComment" data-id="{{ $comment->id }}">Yorum Yap</a>
                                         </div>
                                         <div class="d-flex  align-items-center">
                                             @php
@@ -229,7 +235,7 @@
 
                                         <div class="article-comment bg-white p-2 mt-3 d-flex justify-content-between align-items-center shadow-sm">
                                             <div class="col-md-2">
-                                                <img src="{{ imageExist($child->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
+                                                <img src="{{ imageExist($child->user?->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                                             </div>
                                             <div class="col-md-10">
                                                 <div class="px-3">
@@ -353,6 +359,45 @@
                 @endif
 
 
+            });
+
+            $('.btnArticleResponse').click(function ()
+            {
+                //$('.response-form').toggle();
+                let responseForm = $('.response-form');
+
+                if(responseForm.hasClass("d-none"))
+                {
+                    responseForm.removeClass("d-none");
+                    responseForm.addClass("d-block");
+                }
+
+                $('html, body').animate({
+                    scrollTop: $("#newComment").offset().top
+                }, 50);
+            });
+
+            $('.btnArticleResponseComment').click(function ()
+            {
+
+                let commentID = $(this).data("id");
+                $("#comment_parent_id").val(commentID);
+
+                //$('.response-form').toggle();
+                let responseForm = $('.response-form');
+
+                if(responseForm.hasClass("d-none"))
+                {
+                    responseForm.removeClass("d-none");
+                    responseForm.addClass("d-block");
+                }
+
+
+                console.log(responseForm);
+
+                $('html, body').animate({
+                    scrollTop: $("#newComment").offset().top
+                }, 50);
             });
         });
 

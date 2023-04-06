@@ -11,6 +11,7 @@
             </h2>
         </div>
 
+
         @foreach($articles as $item)
             @php
                 $image = $item->image;
@@ -54,7 +55,13 @@
 
 
         <hr style="border:1px solid #a9abad;" class="mt-5">
-        <div class="col-8 mx-auto mt-5">
+
+        @if($articles->count() <1)
+            <div class="alert alert-info">
+                İçerik bulunamamıştır.
+            </div>
+        @endif
+        <div class="col-12 d-flex justify-content-center mx-auto mt-5">
             {{ $articles->links() }}
         </div>
 

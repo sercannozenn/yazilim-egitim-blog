@@ -86,7 +86,11 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">IP</th>
-                    <th scope="col">Status</th>
+                    @if(isset($page))
+                        <th scope="col">Approve Status</th>
+                    @else
+                        <th scope="col">Status</th>
+                    @endif
                     <th scope="col">Comment</th>
                     <th scope="col">Crated Date</th>
                     <th scope="col">Actions</th>
@@ -109,11 +113,21 @@
                             <td>{{ $comment->email }}</td>
                             <td>{{ $comment->ip }}</td>
                             <td>
-                                @if($comment->status)
-                                    <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Aktif</a>
-                                @else
-                                    <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Pasif</a>
-                                @endif
+                            @if(isset($page))
+                                    @if($comment->approve_status)
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Aktif</a>
+                                    @else
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Pasif</a>
+                                    @endif
+                            @else
+                                    @if($comment->status)
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Aktif</a>
+                                    @else
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus" data-id="{{ $comment->id }}">Pasif</a>
+                                    @endif
+                            @endif
+
+
                             </td>
                             <td>
                                 <span data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ substr( $comment->comment , 0, 200) }}">
@@ -182,6 +196,57 @@
     <script>
         $(document).ready(function ()
         {
+            @if(isset($page))
+            $('.btnChangeStatus').click(function () {
+                let id = $(this).data('id');
+                let self = $(this);
+                Swal.fire({
+                    title: 'Onaylamak istediğinize emin misiniz?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Evet',
+                    denyButtonText: `Hayır`,
+                    cancelButtonText: "İptal"
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed)
+                    {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ route('article.pending-approval.changeStatus') }}",
+                            data: {
+                                id : id,
+                                page: "{{ $page }}"
+                            },
+                            async:false,
+                            success: function (data) {
+                                $('#row-'+id).remove();
+                                Swal.fire({
+                                    title: "Başarılı",
+                                    text: "Onaylanmıştır.",
+                                    confirmButtonText: 'Tamam',
+                                    icon: "success"
+                                });
+
+                            },
+                            error: function (){
+                                console.log("hata geldi");
+                            }
+                        })
+                    }
+                    else if (result.isDenied)
+                    {
+                        Swal.fire({
+                            title: "Bilgi",
+                            text: "Herhangi bir işlem yapılmadı",
+                            confirmButtonText: 'Tamam',
+                            icon: "info"
+                        });
+                    }
+                })
+
+            });
+            @else
             $('.btnChangeStatus').click(function () {
                 let id = $(this).data('id');
                 let self = $(this);
@@ -206,15 +271,29 @@
                             success: function (data) {
                                 if(data.comment_status)
                                 {
-                                    $("#row-" + id).remove();
+                                    self.removeClass('btn-danger');
+                                    self.addClass('btn-success');
+                                    self.text('Aktif');
+                                    Swal.fire({
+                                        title: "Başarılı",
+                                        text: "Yorumun durumu aktif olarak güncellendi",
+                                        confirmButtonText: 'Tamam',
+                                        icon: "success"
+                                    });
+                                }
+                                else
+                                {
+                                    self.removeClass('btn-success');
+                                    self.addClass('btn-danger');
+                                    self.text('Pasif');
+                                    Swal.fire({
+                                        title: "Başarılı",
+                                        text: "Yorumun durumu pasif olarak güncellendi",
+                                        confirmButtonText: 'Tamam',
+                                        icon: "success"
+                                    });
                                 }
 
-                                Swal.fire({
-                                    title: "Başarılı",
-                                    text: "Yorum Onaylandı",
-                                    confirmButtonText: 'Tamam',
-                                    icon: "success"
-                                });
                             },
                             error: function (){
                                 console.log("hata geldi");
@@ -233,6 +312,8 @@
                 })
 
             });
+            @endif
+
 
             $('.btnDelete').click(function () {
                 let id = $(this).data('id');

@@ -56,18 +56,7 @@ $(document).ready(function () {
         },
     });
 
-    $('.btnArticleResponse').click(function ()
-    {
-        $('.response-form').toggle();
-    });
 
-    $('.btnArticleResponseComment').click(function ()
-    {
-        let commentID = $(this).data("id");
-        $("#comment_parent_id").val(commentID);
-
-        $('.response-form').toggle();
-    });
 
 
 });

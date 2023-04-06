@@ -20,7 +20,9 @@
     <link rel="stylesheet" href="{{ asset("assets/front/swiper/swiper-bundle.min.css") }}">
 
     <link rel="stylesheet" href="{{ asset("assets/front/aos/aos.css") }}">
-    <link rel="stylesheet" href="{{ asset("assets/front/css/highlighter-default.min.css") }}">
+{{--    <link rel="stylesheet" href="{{ asset("assets/front/css/highlighter-default.min.css") }}">--}}
+
+    <link rel="stylesheet" href="{{ asset("assets/plugins/highlight/styles/androidstudio.css") }}">
 
     <link rel="stylesheet" href="{{ asset("assets/front/css/style.css") }}">
 

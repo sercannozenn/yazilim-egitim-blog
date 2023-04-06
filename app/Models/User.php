@@ -55,6 +55,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+//    public function getImageAttribute($value): string
+//    {
+//        if (is_null($value))
+//            return "a";
+//        return $value;
+//    }
+
     public function scopeStatus($query, $status)
     {
         if (!is_null($status))

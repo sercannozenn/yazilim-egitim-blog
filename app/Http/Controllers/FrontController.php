@@ -9,6 +9,7 @@ use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 
 class FrontController extends Controller
@@ -21,43 +22,59 @@ class FrontController extends Controller
 
     public function home()
     {
-        $mostPopularCategories = Article::query()
-            ->select("id", "category_id")
-            ->with('category:id,name,slug,description,created_at,image')
-            ->whereHas("category", function($query){
-                $query->where("status", 1);
-            })
-            ->orderBy("view_count", 'DESC')
-            ->groupBy("category_id")
-            ->get();
+//        $categoryNames = Cache::get("most_popular_categories");
+//        if (!Cache::has("most_popular_categories"))
+//        {
+//            $mostPopularCategories = Article::query()
+//                ->select("id", "category_id")
+//                ->with('category:id,name,slug,description,created_at,image')
+//                ->whereHas("category", function($query){
+//                    $query->where("status", 1);
+//                })
+//                ->orderBy("view_count", 'DESC')
+//                ->groupBy("category_id")
+//                ->get();
+//
+//            $categoryNames = [];
+//            $mostPopularCategories->map(function($item) use(&$categoryNames){
+//                if (count($categoryNames) < 4)
+//                    $categoryNames[] = $item->category;
+//            });
+//            Cache::put("most_popular_categories", $categoryNames, 60);
+//        }
+        $categoryNames = Cache::remember("most_popular_categories", 3600, function(){
+            $mostPopularCategories = Article::query()
+                ->select("id", "category_id")
+                ->with('category:id,name,slug,description,created_at,image')
+                ->whereHas("category", function($query){
+                    $query->where("status", 1);
+                })
+                ->orderBy("view_count", 'DESC')
+                ->groupBy("category_id")
+                ->get();
 
-        $categoryNames = [];
-        $mostPopularCategories->map(function($item) use(&$categoryNames){
-            if (count($categoryNames) < 4)
-                $categoryNames[] = $item->category;
+            $categoryNames = [];
+            $mostPopularCategories->map(function($item) use(&$categoryNames){
+                if (count($categoryNames) < 4)
+                    $categoryNames[] = $item->category;
+            });
+
+            return $categoryNames;
         });
 
+//        Cache::forget("most_popular_articles");
+//        dd("unuttu");
+        $mostPopularArticles  = Cache::remember("most_popular_articles", 3600, function(){
+            return Article::query()
+                ->with("user", "category")
+                ->status(1)
+                ->whereHas("user")
+                ->whereHas("category")
+                ->orderBy("view_count", "DESC")
+                ->limit(6)
+                ->get();
+        });
 
-
-//        if (!$mostPopularCategories->relationLoaded("category"))
-//        {
-//            $mostPopularCategories->load("category");
-//        }
-//
-//        if ($mostPopularCategories->category->isNotEmpty())
-//        {
-//
-//        }
-
-//        dd($mostPopularCategories);
-
-        $mostPopularArticles = Article::query()
-            ->with("user", "category")
-            ->whereHas("user")
-            ->whereHas("category")
-            ->orderBy("view_count", "DESC")
-            ->limit(6)
-            ->get();
 
         $lastPublishedArticles = Article::query()
             ->with("user", "category")
@@ -122,7 +139,6 @@ class FrontController extends Controller
             ->where("article_id", $article->id)
             ->where("user_id", \auth()->id())
             ->first();
-
 
         $article->increment("view_count");
         $article->save();
@@ -195,7 +211,7 @@ class FrontController extends Controller
 
     public function articleList()
     {
-        $articles = Article::query()->orderBy('publish_date', 'DESC')->paginate(5);
+        $articles = Article::query()->orderBy('publish_date', 'DESC')->paginate(9);
 
         return view("front.article-list", compact(  "articles"));
     }

@@ -50,6 +50,11 @@ class ArticleCommentController extends Controller
 
         $comment->status = $comment->status ? 0 : 1;
 
+        $page = $request->page;
+        if ($page=="approval")
+        {
+            $comment->approve_status=1;
+        }
         $comment->save();
 
 

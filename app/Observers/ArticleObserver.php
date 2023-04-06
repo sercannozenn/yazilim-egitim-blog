@@ -27,7 +27,8 @@ class ArticleObserver
      */
     public function updated(Article $article): void
     {
-        $this->updateLog($article, $this->model);
+        if (!$article->wasChanged("view_count"))
+                $this->updateLog($article, $this->model);
     }
 
     /**
