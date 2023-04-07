@@ -237,7 +237,57 @@
                     @endif
                 </td>
             </tr>
+        @elseif($logtype == "App\Models\ArticleComment")
+            @if($data->user)
+                <tr>
+                    <td>Üye Adı</td>
+                    <td>{{ $data->user?->name }}</td>
+                </tr>
+                <tr>
+                    <td>Üye Email</td>
+                    <td>{{ $data->user?->email }}</td>
+                </tr>
+            @else
+                <tr>
+                    <td>Ziyaretçi Adı</td>
+                    <td>{{ $data->name }}</td>
+                </tr>
+                <tr>
+                    <td>Ziyaretçi Email</td>
+                    <td>{{ $data->email }}</td>
+                </tr>
+            @endif
+            <tr>
+                <td>Makale Başlık</td>
+                <td>
+                    <a href="{{route('front.articleDetail',['user'=>$data->user->username, 'article'=>$data->article->slug])}}"
+                       target="_blank">
+                        {{ $data->article->title }}
+                    </a>
+                </td>
+            </tr>
+            @if($data->parent)
+                    <tr>
+                        <td>Üst Yorum</td>
+                        <td>{{ $data->parent->comment }}</td>
+                    </tr>
+            @endif
+                <tr>
+                    <td>Yorum</td>
+                    <td>{{ $data->comment }}</td>
+                </tr>
+                <tr>
+                    <td>IP Adresi</td>
+                    <td>{{ $data->ip }}</td>
+                </tr>
+                <tr>
+                    <td>Yorum Tarihi</td>
+                    <td>{{ $data->created_at }}</td>
+                </tr>
+
+
         @endif
+
 
     </x-slot:rows>
 </x-bootstrap.table>

@@ -7,42 +7,30 @@
         <section class="feature-categories mt-4">
             <div class="row">
                 @foreach($mostPopularCategories as $category)
-                    <div class="col-md-3 p-2"
+                        <div class="col-6 col-md-3 p-3 most-popular-category-wrapper"
                          data-aos="fade-down-right"
                          data-aos-duration="1000"
-                         data-aos-easing="ease-in-out">
-                        <div class="flip-card">
-                            <div class="flip-card-inner">
-                                <div class="flip-card-front">
-                                    <div style="background: url('{{ imageExist($category->image, $settings->category_default_image) }}') no-repeat center center;
-                                                background-size: cover;
-                                                height: 300px"
-                                                class="p-4 position-relative">
-                                </div>
-                                </div>
-                                <div class="flip-card-back px-3" style="height: 300px">
-                                    <h1 class="mt-5">{{ $category->name }}</h1>
-                                    <p>{{ $category->description }}</p>
-                                </div>
-                            </div>
+                         data-aos-easing="ease-in-out"
+                         onclick="window.location.href='{{ route("front.categoryArticles", ['category' => $category->slug]) }}'"
+                        >
+                        <div class="d-flex justify-content-center align-items-center shadow-sm most-popular-category"
+                             style="
+                             height: 300px;
+                             background-color:{{ $category->color }};
+                             border-radius: 10px;"
+                        >
+                           <div class="w-75">
+                               <div class="d-flex justify-content-center">
+                                   <img src="{{imageExist($category->image, $settings->category_default_image) }}"
+                                        class="img-fluid" style="width: 90px"
+                                   >
+                               </div>
+                               <div class="text-center text-secondary mt-3 border-1 border-secondary border-top mt-4 pt-4">
+                                   <h2>{{ $category->name }}</h2>
+                               </div>
+                           </div>
                         </div>
-{{--                        <div--}}
-{{--                            style="--}}
-{{--                             background: url('{{ imageExist($category->image, $settings->category_default_image) }}') no-repeat center center;--}}
-{{--                             background-size: cover;--}}
-{{--                             height: 300px"--}}
-{{--                            class="p-4 position-relative">--}}
-{{--                            <h2 class="text-center text-secondary">{{ $category->name }}</h2>--}}
-{{--                            <p class="" style="text-align: justify">--}}
-{{--                                {{ $category->description }}--}}
-{{--                            </p>--}}
-
-{{--                            <p class="position-absolute" style="bottom: 10px; left: 10px; right: 10px; ">--}}
-{{--                                {{ $category->created_at }}--}}
-{{--                            </p>--}}
-{{--                        </div>--}}
                     </div>
-
                 @endforeach
             </div>
         </section>
@@ -174,6 +162,10 @@
 
     </section>
 @endsection
-
+@push("meta")
+    <meta name="keywords" content="{{ $settings->seo_keywords_home }}">
+    <meta name="description" content="{{ $settings->seo_description_home }}">
+    <meta name="author" content="Sercan Özen">
+@endpush
 @section("js")
 @endsection

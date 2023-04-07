@@ -30,7 +30,8 @@ class Log extends Model
         Article::class,
         User::class,
         Category::class,
-        Settings::class
+        Settings::class,
+        ArticleComment::class
     ];
 
     protected $dateFormat = "Y-m-d H:i:s";

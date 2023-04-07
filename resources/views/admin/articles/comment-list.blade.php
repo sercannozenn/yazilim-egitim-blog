@@ -86,10 +86,10 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">IP</th>
-                    @if(isset($page))
-                        <th scope="col">Approve Status</th>
-                    @else
+                    @if(isset($page) && $page =='commentList')
                         <th scope="col">Status</th>
+                    @else
+                        <th scope="col">Approve Status</th>
                     @endif
                     <th scope="col">Comment</th>
                     <th scope="col">Crated Date</th>
@@ -130,16 +130,16 @@
 
                             </td>
                             <td>
-                                <span data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ substr( $comment->comment , 0, 200) }}">
-                                    {{ substr( $comment->comment, 0, 10 ) }}
-                                </span>
-                                <button type="button" class="btn btn-primary lookComment btn-sm p-0 px-2" data-comment="{{ $comment->comment }}" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button type="button" class="btn btn-primary lookComment btn-sm p-0 px-2"
+                                        data-comment="{{ $comment->comment }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
                                     <span class="material-icons-outlined" style="line-height: unset; font-size: 20px">visibility</span>
                                 </button>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($comment->created_at)->translatedFormat("d F Y H:i:s") }}</td>
                             <td>
-                                <div class="d-flex">
+                                <div class="d-flex actions-{{ $comment->id }}">
                                     <a href="javascript:void(0)"
                                        class="btn btn-danger btn-sm btnDelete"
                                        data-name="{{ $comment->id }}"
@@ -196,7 +196,7 @@
     <script>
         $(document).ready(function ()
         {
-            @if(isset($page))
+            @if(isset($page) && $page!='commentList')
             $('.btnChangeStatus').click(function () {
                 let id = $(this).data('id');
                 let self = $(this);
@@ -338,8 +338,18 @@
                             },
                             async:false,
                             success: function (data) {
-
-                                $('#row-' + id).remove();
+                                let aElement = document.createElement("a");
+                                aElement.className="btn btn-primary btn-sm btnRestore";
+                                aElement.setAttribute("data-name",id);
+                                aElement.setAttribute("data-id",id);
+                                aElement.setAttribute("title","Geri Al");
+                                aElement.href="javascript:void(0)";
+                                let iElement = document.createElement("i");
+                                iElement.className="material-icons ms-0";
+                                iElement.innerText="undo";
+                                aElement.append(iElement);
+                                let actions = document.getElementsByClassName("actions-"+id);
+                                actions[0].appendChild(aElement);
                                 Swal.fire({
                                     title: "Başarılı",
                                     text: "Yorum Silindi",
@@ -365,8 +375,7 @@
                 })
 
             });
-
-            $('.btnRestore').click(function () {
+               $(document).on('click','body .btnRestore',function () {
                 let id = $(this).data('id');
 
                 let self = $(this);

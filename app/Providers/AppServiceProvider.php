@@ -32,7 +32,9 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['front.*', 'mail::header', 'email.*', "layouts.admin.*"], function($view){
 //            dd($view);
             $settings = Settings::first();
-            $categories = Category::query()->where("status", 1)
+            $categories = Category::query()
+                ->with('childCategories')
+                ->where("status", 1)
                 ->orderBy('order','DESC')
                 ->get();
             $view->with("settings", $settings)->with("categories", $categories);

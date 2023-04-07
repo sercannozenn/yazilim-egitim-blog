@@ -37,7 +37,7 @@
                                placeholder="Kullanıcı Adı"
                                name="username"
                                id="username"
-                               value="{{ isset($user) ? $user->username : "" }}"
+                               value="{{ isset($user) ? $user->username : old('username') }}"
                                required
                         >
                         @if($errors->has("username"))
@@ -66,7 +66,7 @@
                                placeholder="Kullanıcı Ad Soyad"
                                name="name"
                                id="name"
-                               value="{{ isset($user) ? $user->name : "" }}"
+                               value="{{ isset($user) ? $user->name : old('name') }}"
                         >
 
                         <label for="email" class="form-label">Email</label>
@@ -74,27 +74,29 @@
                                class="form-control form-control-solid-bordered"
                                placeholder="Email"
                                name="email"
-                               value="{{ isset($user) ? $user->email : "" }}"
+                               value="{{ isset($user) ? $user->email : old('email') }}"
                                id="email"
                         >
 
 
 
                         <label for="about" class="form-label">Hakkında Yazısı</label>
-                        <textarea name="about" id="about" class="m-b-sm">{!! isset($user) ? $user->about : "" !!}</textarea>
+                        <textarea name="about" id="about" class="m-b-sm">{!! isset($user) ? $user->about : old('about') !!}</textarea>
 
                         <div class="row mt-5">
                             <div class="col-8">
                                 <label for="image" class="form-label m-t-sm">Kullanıcı Görseli</label>
                                 <select name="image" id="image" class="form-control">
-                                    <option value="{{ null }}">Görsel Seçin</option>
-                                    <option value="/assets/images/user-images/profile1.png">Profile 1</option>
-                                    <option value="/assets/images/user-images/profile2.png">Profile 2</option>
+                                    <option  value="{{ null }}">Görsel Seçin</option>
+                                    <option value="/assets/images/user-images/profile1.png"
+                                        {{isset($user) && $user->image=="/assets/images/user-images/profile1.png" ? 'selected' : (old('image') == "/assets/images/user-images/profile1.png" ? "selected" : "")}}>Profile 1</option>
+                                    <option value="/assets/images/user-images/profile2.png"
+                                        {{isset($user) && $user->image=="/assets/images/user-images/profile2.png" ? 'selected' : (old('image') == "/assets/images/user-images/profile2.png" ? "selected" : "")}}>Profile 2</option>
 
                                 </select>
                             </div>
                             <div class="col-4">
-                                <img src="{{ isset($user) ? asset($user->image) : "" }}" alt="" class="img-fluid"
+                                <img src="{{ isset($user) ? asset($user->image) : old('image') }}" alt="" class="img-fluid"
                                      style="max-height: 80px;" id="profileImage"
                                 >
                             </div>
@@ -103,7 +105,7 @@
 
 
                         <div class="form-check mt-5">
-                            <input class="form-check-input" type="checkbox" name="is_admin" value="1" id="is_admin" {{ isset($user) && $user->is_admin  ? "checked" : "" }}>
+                            <input class="form-check-input" type="checkbox" name="is_admin" value="1" id="is_admin" {{ isset($user) && $user->is_admin  ? "checked" : (old('is_admin') ? 'checked' : "") }}>
                             <label class="form-check-label" for="is_admin">
                                 Kullanıcı Admin mi?
                             </label>
@@ -111,7 +113,7 @@
 
 
                         <div class="form-check mt-5">
-                            <input class="form-check-input" type="checkbox" name="status" value="1" id="status" {{ isset($user) && $user->status  ? "checked" : "" }}>
+                            <input class="form-check-input" type="checkbox" name="status" value="1" id="status" {{ isset($user) && $user->status  ? "checked" : (old('status') ? 'checked' : "") }}>
                             <label class="form-check-label" for="status">
                                 Kullanıcı Aktif Olsun mu?
                             </label>

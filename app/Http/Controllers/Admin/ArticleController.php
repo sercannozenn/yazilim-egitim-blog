@@ -205,19 +205,19 @@ class ArticleController extends Controller
 
 
 
-//        if ($articleFind->title != $data['title'] || $articleFind->slug != $data['slug'])
-//        {
-//            if (Cache::has("most_popular_articles"))
-//            {
-//                $mpA = Cache::get("most_popular_articles");
-//                $mpA->where("title", $articleFind->title)->first()->update([
-//                    'title' =>  $data['title'],
-//                    'slug' => $slug
-//                ]);
-//                Cache::put("most_popular_articles", $mpA, 3600);
-//            }
-//            //            Cache::forget("most_popular_articles");
-//        }
+        if ($articleFind->title != $data['title'] || (isset($data['slug']) && $articleFind->slug != $data['slug'] ))
+        {
+            if (Cache::has("most_popular_articles"))
+            {
+                $mpA = Cache::get("most_popular_articles");
+                $mpA->where("title", $articleFind->title)->first()->update([
+                    'title' =>  $data['title'],
+                    'slug' => $slug
+                ]);
+                Cache::put("most_popular_articles", $mpA, 3600);
+            }
+            //            Cache::forget("most_popular_articles");
+        }
 
 
 

@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\ArticleComment;
 use App\Models\User;
 use App\Models\UserLikeComment;
+use App\Traits\Loggable;
 use Illuminate\Http\Request;
 
 class ArticleCommentController extends Controller
 {
+    use Loggable;
     public function approvalList(Request $request)
     {
         $users = User::all();
@@ -47,14 +49,16 @@ class ArticleCommentController extends Controller
     public function changeStatus(Request $request)
     {
         $comment = ArticleComment::findOrFail($request->id);
-
-        $comment->status = $comment->status ? 0 : 1;
-
         $page = $request->page;
         if ($page=="approval")
         {
             $comment->approve_status=1;
         }
+        else
+        {
+            $comment->status = $comment->status ? 0 : 1;
+        }
+        $this->updateLog($comment,ArticleComment::class);
         $comment->save();
 
 
@@ -71,14 +75,15 @@ class ArticleCommentController extends Controller
     {
         $comment = ArticleComment::findOrFail($request->id);
 
+        $this->log('delete',$comment->id, $comment->toArray(),ArticleComment::class);
         $comment->delete();
 
         return response()->json(
             [
                 'status' => "success",
                 "message" => "Başarılı",
-                "data" => $comment,
-                "comment_status" => $comment->status])
+                "data" => $comment
+               ])
             ->setStatusCode(200);
     }
 

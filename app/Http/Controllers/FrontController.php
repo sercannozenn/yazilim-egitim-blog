@@ -45,9 +45,10 @@ class FrontController extends Controller
         $categoryNames = Cache::remember("most_popular_categories", 3600, function(){
             $mostPopularCategories = Article::query()
                 ->select("id", "category_id")
-                ->with('category:id,name,slug,description,created_at,image')
+                ->with('category:id,name,slug,description,created_at,image,color')
                 ->whereHas("category", function($query){
-                    $query->where("status", 1);
+                    $query->where("status", 1)
+                    ->where("feature_status", 1);
                 })
                 ->orderBy("view_count", 'DESC')
                 ->groupBy("category_id")
@@ -99,10 +100,10 @@ class FrontController extends Controller
                 $query->where("slug", $slug);
             })->paginate(21);
 
+        $category=Category::query()->where("slug", $slug)->first();
+        $title = $category->name . " Kategorisine Ait Makaleler";
 
-        $title = Category::query()->where("slug", $slug)->first()->name . " Kategorisine Ait Makaleler";
-
-        return view("front.article-list", compact(  "articles", 'title'));
+        return view("front.article-list", compact(  "articles", 'title', 'category'));
 
     }
 

@@ -32,9 +32,7 @@ Route::prefix("admin")->middleware(['auth', 'verified'])->group(function()
         Route::get('logs-db/{id}', [LogController::class, 'getLog'])->name("dblogs.getLog")->whereNumber("id");
 
 
-        Route::get('/', function () {
-            return view('admin.index');
-        })->name("admin.index");
+        Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, "index"])->name("admin.index");
 
         Route::get("articles", [ArticleController::class, "index"])->name("article.index");
         Route::get("articles/create", [ArticleController::class, "create"])->name("article.create");

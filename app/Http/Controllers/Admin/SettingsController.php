@@ -27,6 +27,10 @@ class SettingsController extends Controller
         $settings->header_text = $request->header_text;
         $settings->footer_text = $request->footer_text;
         $settings->telegram_link = $request->telegram_link;
+        $settings->seo_keywords_home = $request->seo_keywords_home;
+        $settings->seo_description_home = $request->seo_description_home;
+        $settings->seo_keywords_articles = $request->seo_keywords_articles;
+        $settings->seo_description_articles = $request->seo_description_articles;
 
         if ($request->video_is_active)
             $settings->video_is_active = 1;
