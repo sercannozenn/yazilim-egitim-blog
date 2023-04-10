@@ -82,6 +82,7 @@ $(document).ready(function () {
         },
         height: 100
     })
+
     $('#about').summernote({
         // toolbar: [
         //     ['popovers', ['lfm']],
@@ -92,6 +93,22 @@ $(document).ready(function () {
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['table', ['table']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        buttons: {
+            lfm: LFMButton
+        },
+        height: 100
+    })
+
+    $('#custom_content').summernote({
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'lfm']],
             ['view', ['fullscreen', 'codeview', 'help']]
         ],
         buttons: {

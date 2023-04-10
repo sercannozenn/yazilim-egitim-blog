@@ -32,7 +32,7 @@ class UserRegisteredObserver
         ]);
         $user->notify(new VerifyNotification($token));
 
-        $this->log("create", $user->id, $user->toArray(), $this->model);
+        $this->log("create", $user->id, $user->toArray(), $this->model, true);
 
     }
 

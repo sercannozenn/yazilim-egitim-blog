@@ -72,6 +72,29 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ Route::is("admin.email-themes.create")
+                          || Route::is("admin.email-themes.index")
+                          || Route::is("admin.email-themes.assign")
+                          || Route::is("admin.email-themes.edit")
+                           ? "open" : "" }}">
+                <a href="#" class="">
+                    <i class="material-icons">tune</i>
+                    Email Yönetimi
+                    <i class="material-icons has-sub-menu">keyboard_arrow_right</i>
+                </a>
+                <ul class="sub-menu" style="">
+                    <li>
+                        <a href="{{ route("admin.email-themes.create") }}" class="{{ Route::is("admin.email-themes.create") ? "active" : "" }}">Yeni Tema Ekleme</a>
+                    </li>
+                    <li>
+                        <a href="{{ route("admin.email-themes.index") }}" class="{{ Route::is("admin.email-themes.index") ? "active" : "" }}">Temalar</a>
+                    </li>
+                    <li>
+                        <a href="{{ route("admin.email-themes.assign") }}" class="{{ Route::is("admin.email-themes.assign") ? "active" : "" }}">Tema Atama/Seçimi</a>
+                        <a href="{{ route("admin.email-themes.assign-list") }}" class="{{ Route::is("admin.email-themes.assign") ? "active" : "" }}">Tema Atama Listesi</a>
+                    </li>
+                </ul>
+            </li>
 
             <li class="{{ Route::is("settings") ? "open" : "" }}">
                 <a href="{{ route("settings") }}" >

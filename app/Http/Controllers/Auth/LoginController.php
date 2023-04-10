@@ -11,9 +11,6 @@ use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use App\Models\UserVerify;
 use App\Traits\Loggable;
-use Illuminate\Database\Concerns\BuildsQueries;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -73,8 +70,6 @@ class LoginController extends Controller
             Auth::login($user, $remember);
 
             $this->log("login", $user->id, $user->toArray(), User::class);
-
-            \Log::notice("User login: $user->name", $user->toArray());
 
             $userIsAdmin = Auth::user()->is_admin;
             if (!$userIsAdmin)
@@ -143,7 +138,7 @@ class LoginController extends Controller
         if (Auth::check())
         {
             $isAdmin = Auth::user()->is_admin;
-            $this->log("logout", \auth()->id(), \auth()->user()->toArray(), User::class);
+            $this->log("logout", auth()->id(), auth()->user()->toArray(), User::class);
 
             Auth::logout();
 
@@ -227,7 +222,7 @@ class LoginController extends Controller
         if ($userCheck)
         {
             Auth::login($userCheck);
-            $this->log("verify user", \auth()->id, \auth()->user()->toArray(), User::class);
+            $this->log("verify user", auth()->id(), auth()->user()->toArray(), User::class);
 
             return redirect()->route("home");
         }
@@ -257,7 +252,6 @@ class LoginController extends Controller
         $email = $request->email;
         $find = User::query()->where("email", $email)->firstOrFail();
 
-
         $tokenFind = DB::table('password_reset_tokens')->where("email", $email)->first();
         if ($tokenFind)
         {
@@ -284,7 +278,7 @@ class LoginController extends Controller
         }
 
         Mail::to($find->email)->send(new ResetPasswordMail($find, $token));
-        $this->log("password reset mail send", $find->id, $find->toArray(), User::class);
+        $this->log("password reset mail send", $find->id, $find->toArray(), User::class, true);
 
         alert()
             ->success('Başarılı', "Parola sıfırlama maili gönderilmiştir.")
@@ -292,7 +286,6 @@ class LoginController extends Controller
             ->autoClose(5000);
 
         return redirect()->back();
-
     }
 
     public function passwordReset(PasswordResetRequest $request)

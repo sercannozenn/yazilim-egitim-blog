@@ -6,10 +6,10 @@ use App\Models\Log;
 
 trait Loggable
 {
-    public function log(string $action, int $loggableID, $data, $model): void
+    public function log(string $action, int $loggableID, $data, $model, $noAuth= false): void
     {
         Log::create([
-            'user_id' => auth()->id(),
+            'user_id' => $noAuth ? 0 : auth()->id(),
             'action' => $action,
             "data" => json_encode($data),
             'loggable_id' => $loggableID,

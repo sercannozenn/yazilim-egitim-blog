@@ -133,6 +133,38 @@
         }
     </style>
 </head>
+@php
+    if (isset($theme))
+        {
+            $title = $theme->title;
+
+            $logo = $theme->logo;
+            $logoAlt = $theme->logo_alt;
+            $logoTitle = $theme->logo_title;
+
+            $buttonText = $theme->button_text;
+            $description = $theme->description;
+
+            $resetPasswordImage = $theme->reset_password_image;
+            $resetPasswordImageAlt = $theme->reset_password_image_alt;
+            $resetPasswordImageTitle = $theme->reset_password_image_title;
+        }
+    else
+        {
+            $title = "Parola Sıfırlama Maili";
+            $logo = asset($settings->logo);
+            $logoAlt = "Parola Sıfırlama";
+            $logoTitle = "Parola Sıfırlama";
+
+            $buttonText = "Parolamı Sıfırla";
+            $description = "Aşağıdaki linke tıklayarak parolanızı sıfırlayabilisiniz.";
+
+            $resetPasswordImage = asset($settings->reset_password_image);
+            $resetPasswordImageAlt = "Parola Sıfırla";
+            $resetPasswordImageTitle = "Parola Sıfırla";
+
+        }
+@endphp
 <body style="background-color: #fff0e3; margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
 <table border="0" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff0e3;" width="100%">
@@ -191,9 +223,9 @@
                                         <tr>
                                             <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
                                                 <div align="center" class="alignment" style="line-height:10px"><img
-                                                        alt="Parola Sıfırlama" src="{{ asset($settings->logo) }}"
+                                                        alt="{{ $logoAlt }}" src="{{ $logo }}"
                                                         style="display: block; height: auto; border: 0; width: 147px; max-width: 100%;"
-                                                        title="Parola Sıfırlama" width="147"/></div>
+                                                        title="{{ $logoTitle }}" width="147"/></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -257,10 +289,10 @@
                                         <tr>
                                             <td class="pad">
                                                 <div align="center" class="alignment" style="line-height:10px"><img
-                                                        alt="Parola Sıfırla" class="fullMobileWidth"
-                                                        src="{{ asset($settings->reset_password_image) }}"
+                                                        alt="{{ $resetPasswordImageAlt }}" class="fullMobileWidth"
+                                                        src="{{ $resetPasswordImage }}"
                                                         style="display: block; height: auto; border: 0; width: 374px; max-width: 100%;"
-                                                        title="Parola Sıfırla" width="374"/></div>
+                                                        title="{{ $resetPasswordImageTitle }}" width="374"/></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -273,7 +305,7 @@
                                         <tr>
                                             <td class="pad" style="text-align:center;width:100%;">
                                                 <h1 style="margin: 0; color: #101010; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 27px; font-weight: normal; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;">
-                                                    <strong>{{ $title ?? "Parola Sıfırlama Maili" }}</strong></h1>
+                                                    <strong>{{ $title }}</strong></h1>
                                             </td>
                                         </tr>
                                     </table>
@@ -317,7 +349,7 @@
                                                     <div class=""
                                                          style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
                                                         <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
-                                                            <span style="font-size:14px;">{{ $description ?? "Aşağıdaki linke tıklayarak parolanızı sıfırlayabilisiniz." }}</span>
+                                                            <span style="font-size:14px;">{{ $description  }}</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -347,7 +379,7 @@
                                                                    style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#101;border-radius:4px;width:auto;border-top:1px solid #101;font-weight:undefined;border-right:1px solid #101;border-bottom:1px solid #101;border-left:1px solid #101;padding-top:5px;padding-bottom:5px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"
                                                                    target="_blank"><span
                                                             style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
-                                                                style="word-break: break-word; line-height: 32px;">Parolamı Sıfırla</span></span></a>
+                                                                style="word-break: break-word; line-height: 32px;">{{ $buttonText }}</span></span></a>
                                                     <!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
                                             </td>
                                         </tr>

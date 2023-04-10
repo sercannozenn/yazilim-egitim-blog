@@ -9,6 +9,7 @@ use \App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ArticleCommentController;
 use App\Http\Controllers\Admin\LogController;
+use App\Http\Controllers\Admin\EmailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,20 @@ Route::prefix("admin")->middleware(['auth', 'verified'])->group(function()
         Route::delete('users/delete', [UserController::class, 'delete'])->name("user.delete");
         Route::post('users/restore', [UserController::class, 'restore'])->name("user.restore");
 
+        Route::get("email-themes", [EmailController::class, "themes"])->name("admin.email-themes.index");
+        Route::get("email-themes/create", [EmailController::class, "create"])->name("admin.email-themes.create");
+        Route::post("email-themes/create", [EmailController::class, "store"]);
+        Route::get("email-themes/edit", [EmailController::class, "edit"])->name("admin.email-themes.edit");
+        Route::post("email-themes/edit", [EmailController::class, "update"]);
+        Route::delete("email-themes/delete", [EmailController::class, "delete"])->name("admin.email-themes.delete");
+        Route::post("email-themes/change-status", [EmailController::class, "changeStatus"])->name("admin.email-themes.changeStatus");
+
+        Route::get("email-themes/assign-list", [EmailController::class, "assignList"])->name("admin.email-themes.assign-list");
+        Route::get("email-themes/assign-list/show-email", [EmailController::class, "showEmail"])->name("admin.email-themes.assign.show.email");
+        Route::delete("email-themes/assign-list/delete", [EmailController::class, "assignDelete"])->name("admin.email-themes.assign.delete");
+        Route::get("email-themes/assign", [EmailController::class, "assignShow"])->name("admin.email-themes.assign");
+        Route::post("email-themes/assign", [EmailController::class, "assign"]);
+        Route::get("email-themes/assign/get-theme", [EmailController::class, "assignGetTheme"])->name("admin.email-themes.assign.getTheme");
     });
 
     Route::post('article/favorite', [ArticleController::class, 'favorite'])->name("article.favorite");
